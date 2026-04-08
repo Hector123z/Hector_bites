@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Héctor Bites | Gran Amauta 3037</title>
+    <title>Héctor Bites | Gran Amauta</title>
     <style>
         :root {
-            --primary: #1b5e20; /* Verde oscuro del colegio */
+            --primary: #1b5e20; 
             --accent: #d2a679;
             --success: #25D366;
-            --bg: #f1f8e9;
+            --bg: #e8f5e9;
             --white: #ffffff;
         }
 
@@ -22,7 +22,6 @@
             justify-content: center;
             padding: 20px;
             margin: 0;
-            color: #333;
         }
 
         .card {
@@ -36,12 +35,13 @@
         }
 
         .insignia {
-            width: 80px;
+            width: 70px;
             margin-bottom: 10px;
+            border-radius: 5px;
         }
 
         .header h1 { margin: 5px 0; font-size: 24px; color: var(--primary); }
-        .header p { margin: 0 0 20px; font-size: 14px; color: #666; font-weight: bold;}
+        .header p { margin: 0 0 20px; font-size: 13px; color: #666; font-weight: bold;}
 
         .item-card {
             background: #f9f9f9;
@@ -56,7 +56,8 @@
 
         .item-info { display: flex; align-items: center; gap: 12px; }
         .item-img { font-size: 24px; }
-        .item-detail b { display: block; font-size: 15px; text-align: left; }
+        .item-detail { text-align: left; }
+        .item-detail b { display: block; font-size: 15px; }
         .item-detail span { font-size: 12px; color: #888; }
 
         .counter { display: flex; align-items: center; gap: 10px; background: #eee; padding: 4px; border-radius: 50px; }
@@ -67,10 +68,11 @@
             background: var(--white);
             font-weight: bold;
             cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .form-group { margin-top: 20px; text-align: left; }
-        label { font-size: 13px; font-weight: bold; color: var(--primary); margin-left: 5px; }
+        label { font-size: 12px; font-weight: bold; color: var(--primary); margin-left: 5px; text-transform: uppercase; }
         
         input, select {
             width: 100%;
@@ -80,14 +82,16 @@
             border-radius: 12px;
             font-size: 15px;
             background: #fff;
+            outline: none;
         }
+        input:focus, select:focus { border-color: var(--primary); }
 
-        .grid-aula { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-aula { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; }
 
         .total-box {
             background: var(--primary);
             color: white;
-            padding: 15px;
+            padding: 18px;
             border-radius: 15px;
             display: flex;
             justify-content: space-between;
@@ -100,12 +104,13 @@
             background: var(--success);
             color: white;
             border: none;
-            padding: 16px;
+            padding: 18px;
             border-radius: 15px;
             font-size: 17px;
             font-weight: 700;
             margin-top: 15px;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
         }
 
         footer { margin-top: 20px; font-size: 11px; opacity: 0.5; }
@@ -114,7 +119,8 @@
 <body>
 
 <div class="card">
-    <img src="https://i.ibb.co/LzNfXN6/gran-amauta-logo.png" alt="Insignia Gran Amauta" class="insignia">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_mR2A4R9JvO2_lF7S6V6eF_I7mGZ-E6tZSQ&s>
+    
     <div class="header">
         <h1>Héctor Bites 🍪</h1>
         <p>I.E. 3037 GRAN AMAUTA</p>
@@ -127,7 +133,7 @@
         </div>
         <div class="counter">
             <button class="btn-step" onclick="change('p1', -1)">-</button>
-            <span id="p1">0</span>
+            <span id="p1" style="font-weight: bold; min-width: 15px; text-align: center;">0</span>
             <button class="btn-step" onclick="change('p1', 1)">+</button>
         </div>
     </div>
@@ -139,56 +145,55 @@
         </div>
         <div class="counter">
             <button class="btn-step" onclick="change('p2', -1)">-</button>
-            <span id="p2">0</span>
+            <span id="p2" style="font-weight: bold; min-width: 15px; text-align: center;">0</span>
             <button class="btn-step" onclick="change('p2', 1)">+</button>
         </div>
     </div>
 
     <div class="form-group">
-        <label>TU NOMBRE</label>
-        <input type="text" id="nombre" placeholder="Ej: Héctor Pérez">
+        <label>Nombre del Estudiante</label>
+        <input type="text" id="nombre" placeholder="Escribe tu nombre completo">
 
         <div class="grid-aula">
             <div>
-                <label>GRADO</label>
+                <label>Grado</label>
                 <select id="grado">
-                    <option value="1ro">1ro</option>
-                    <option value="2do">2do</option>
-                    <option value="3ro">3ro</option>
-                    <option value="4to">4to</option>
-                    <option value="5to" selected>5to</option>
-                    <option value="Secundaria">Secundaria</option>
+                    <option value="3ro Secundaria">3ro Secundaria</option>
+                    <option value="4to Secundaria">4to Secundaria</option>
+                    <option value="5to Secundaria" selected>5to Secundaria</option>
                 </select>
             </div>
             <div>
-                <label>SECCIÓN</label>
+                <label>Sección</label>
                 <select id="seccion">
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
                     <option value="D">D</option>
                     <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="H">H</option>
                 </select>
             </div>
         </div>
     </div>
 
     <div class="total-box">
-        <span>Total:</span>
-        <b id="total-display">S/ 0.00</b>
+        <span style="opacity: 0.9;">Total a pagar:</span>
+        <b id="total-display" style="font-size: 22px;">S/ 0.00</b>
     </div>
 
-    <button class="btn-send" onclick="enviar()">ENVIAR POR WHATSAPP</button>
+    <button class="btn-send" onclick="enviar()">🚀 ENVIAR PEDIDO</button>
     
-    <footer>Pedido oficial para alumnos del 3037</footer>
+    <footer>Servicio de delivery escolar - Héctor Bites</footer>
 </div>
 
 <script>
     const precios = { p1: 0.5, p2: 1.0 };
     const cantidades = { p1: 0, p2: 0 };
     
-    // Lista de palabras no permitidas (puedes agregar más)
-    const insultos = ["tonto", "bobo", "estupido", "idiota", "mierda"]; 
+    const insultos = ["tonto", "bobo", "mierda", "estupido", "idiota", "ctm", "puto"]; 
 
     function change(id, val) {
         cantidades[id] = Math.max(0, cantidades[id] + val);
@@ -203,35 +208,35 @@
         const seccion = document.getElementById("seccion").value;
         const total = document.getElementById("total-display").innerText;
 
-        // Validar nombre real y no insultos
         if (nombre.length < 3) {
-            alert("❌ Pon un nombre real, por favor.");
+            alert("⚠️ Por favor, ingresa un nombre válido.");
             return;
         }
 
         let tieneInsulto = insultos.some(palabra => nombre.includes(palabra));
         if (tieneInsulto) {
-            alert("🚫 Por favor, usa un nombre respetuoso.");
+            alert("🚫 Nombre no permitido. Sé respetuoso.");
             return;
         }
 
         if (cantidades.p1 === 0 && cantidades.p2 === 0) {
-            alert("🛒 Elige tus galletas primero.");
+            alert("🛒 Selecciona cuántas galletas deseas pedir.");
             return;
         }
 
         const msg = encodeURIComponent(
-            `*🍪 PEDIDO GRAN AMAUTA 3037*\n\n` +
-            `*Nombre:* ${nombre.toUpperCase()}\n` +
-            `*Ubicación:* ${grado} "${seccion}"\n` +
+            `*🍪 PEDIDO HÉCTOR BITES - GRAN AMAUTA*\n\n` +
+            `*Cliente:* ${nombre.toUpperCase()}\n` +
+            `*Grado:* ${grado}\n` +
+            `*Sección:* "${seccion}"\n` +
             `--------------------------\n` +
             `• Individuales: ${cantidades.p1}\n` +
             `• Packs Duo: ${cantidades.p2}\n` +
             `--------------------------\n` +
-            `*Total: ${total}*`
+            `*Monto Total: ${total}*`
         );
 
-        const numero = "51999999999"; 
+        const numero = "51975754119"; // CAMBIA ESTO POR TU NÚMERO
         window.open(`https://wa.me/${numero}?text=${msg}`, "_blank");
     }
 </script>
