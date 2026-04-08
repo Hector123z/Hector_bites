@@ -6,157 +6,171 @@
     <title>Héctor Bites | Gran Amauta</title>
     <style>
         :root {
-            --primary: #1b5e20; 
-            --accent: #d2a679;
-            --success: #25D366;
-            --bg: #e8f5e9;
-            --white: #ffffff;
+            --verde-amauta: #1b5e20;
+            --verde-claro: #f1f8e9;
+            --whatsapp: #25D366;
+            --blanco: #ffffff;
         }
 
-        * { box-sizing: border-box; transition: all 0.2s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg);
+            background-color: var(--verde-claro);
             display: flex;
             justify-content: center;
-            padding: 20px;
-            margin: 0;
+            padding: 15px;
         }
 
-        .card {
-            background: var(--white);
+        /* Contenedor principal VERTICAL */
+        .container {
+            background: var(--blanco);
             width: 100%;
-            max-width: 450px;
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            text-align: center;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column; /* Alinea todo hacia abajo */
+            align-items: center;
         }
 
         .insignia {
-            width: 70px;
+            width: 80px;
+            height: auto;
             margin-bottom: 10px;
-            border-radius: 5px;
         }
 
-        .header h1 { margin: 5px 0; font-size: 24px; color: var(--primary); }
-        .header p { margin: 0 0 20px; font-size: 13px; color: #666; font-weight: bold;}
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: var(--verde-amauta); font-size: 26px; }
+        .header p { color: #666; font-size: 14px; font-weight: bold; }
 
-        .item-card {
-            background: #f9f9f9;
-            border-radius: 18px;
-            padding: 12px 15px;
+        /* Tarjetas de Producto */
+        .producto {
+            width: 100%;
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .prod-info b { display: block; font-size: 16px; }
+        .prod-info span { font-size: 13px; color: var(--verde-amauta); font-weight: bold; }
+
+        .contador {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            border: 1px solid #eee;
+            gap: 12px;
+            background: #eee;
+            padding: 5px 10px;
+            border-radius: 50px;
         }
 
-        .item-info { display: flex; align-items: center; gap: 12px; }
-        .item-img { font-size: 24px; }
-        .item-detail { text-align: left; }
-        .item-detail b { display: block; font-size: 15px; }
-        .item-detail span { font-size: 12px; color: #888; }
-
-        .counter { display: flex; align-items: center; gap: 10px; background: #eee; padding: 4px; border-radius: 50px; }
-        .btn-step {
-            width: 32px; height: 32px;
+        .btn-count {
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             border: none;
-            background: var(--white);
+            background: var(--blanco);
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .form-group { margin-top: 20px; text-align: left; }
-        label { font-size: 12px; font-weight: bold; color: var(--primary); margin-left: 5px; text-transform: uppercase; }
+        /* Formulario */
+        .formulario { width: 100%; margin-top: 15px; }
+        label { font-size: 12px; font-weight: bold; color: var(--verde-amauta); display: block; margin-bottom: 5px; }
         
         input, select {
             width: 100%;
             padding: 12px;
-            margin: 5px 0 15px 0;
+            border-radius: 10px;
             border: 2px solid #eee;
-            border-radius: 12px;
+            margin-bottom: 15px;
             font-size: 15px;
-            background: #fff;
-            outline: none;
         }
-        input:focus, select:focus { border-color: var(--primary); }
 
-        .grid-aula { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; }
+        .grid-selects {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
 
-        .total-box {
-            background: var(--primary);
+        /* Caja de Total */
+        .total-card {
+            width: 100%;
+            background: var(--verde-amauta);
             color: white;
-            padding: 18px;
-            border-radius: 15px;
+            padding: 15px;
+            border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 10px;
         }
 
-        .btn-send {
+        /* Botón Enviar */
+        .btn-enviar {
             width: 100%;
-            background: var(--success);
+            background: var(--whatsapp);
             color: white;
             border: none;
-            padding: 18px;
-            border-radius: 15px;
-            font-size: 17px;
-            font-weight: 700;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
             margin-top: 15px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
         }
 
-        footer { margin-top: 20px; font-size: 11px; opacity: 0.5; }
+        footer { margin-top: 20px; font-size: 11px; color: #999; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_mR2A4R9JvO2_lF7S6V6eF_I7mGZ-E6tZSQ&s>
+<div class="container">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_mR2A4R9JvO2_lF7S6V6eF_I7mGZ-E6tZSQ&s" alt="Insignia Amauta" class="insignia">
     
     <div class="header">
         <h1>Héctor Bites 🍪</h1>
         <p>I.E. 3037 GRAN AMAUTA</p>
     </div>
 
-    <div class="item-card">
-        <div class="item-info">
-            <div class="item-img">🍪</div>
-            <div class="item-detail"><b>1 Galleta</b><span>S/ 0.50</span></div>
+    <div class="producto">
+        <div class="prod-info">
+            <b>1 Galleta</b>
+            <span>S/ 0.50</span>
         </div>
-        <div class="counter">
-            <button class="btn-step" onclick="change('p1', -1)">-</button>
-            <span id="p1" style="font-weight: bold; min-width: 15px; text-align: center;">0</span>
-            <button class="btn-step" onclick="change('p1', 1)">+</button>
-        </div>
-    </div>
-
-    <div class="item-card">
-        <div class="item-info">
-            <div class="item-img">🎁</div>
-            <div class="item-detail"><b>Pack Duo</b><span>S/ 1.00</span></div>
-        </div>
-        <div class="counter">
-            <button class="btn-step" onclick="change('p2', -1)">-</button>
-            <span id="p2" style="font-weight: bold; min-width: 15px; text-align: center;">0</span>
-            <button class="btn-step" onclick="change('p2', 1)">+</button>
+        <div class="contador">
+            <button class="btn-count" onclick="cambiar('p1', -1)">-</button>
+            <span id="p1" style="font-weight:bold">0</span>
+            <button class="btn-count" onclick="cambiar('p1', 1)">+</button>
         </div>
     </div>
 
-    <div class="form-group">
-        <label>Nombre del Estudiante</label>
-        <input type="text" id="nombre" placeholder="Escribe tu nombre completo">
+    <div class="producto">
+        <div class="prod-info">
+            <b>Pack Duo</b>
+            <span>S/ 1.00</span>
+        </div>
+        <div class="contador">
+            <button class="btn-count" onclick="cambiar('p2', -1)">-</button>
+            <span id="p2" style="font-weight:bold">0</span>
+            <button class="btn-count" onclick="cambiar('p2', 1)">+</button>
+        </div>
+    </div>
 
-        <div class="grid-aula">
+    <div class="formulario">
+        <label>NOMBRE COMPLETO</label>
+        <input type="text" id="nombre" placeholder="Escribe tu nombre">
+
+        <div class="grid-selects">
             <div>
-                <label>Grado</label>
+                <label>GRADO</label>
                 <select id="grado">
                     <option value="3ro Secundaria">3ro Secundaria</option>
                     <option value="4to Secundaria">4to Secundaria</option>
@@ -164,80 +178,64 @@
                 </select>
             </div>
             <div>
-                <label>Sección</label>
+                <label>SECCIÓN</label>
                 <select id="seccion">
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="F">F</option>
-                    <option value="G">G</option>
-                    <option value="H">H</option>
+                    <option value="A">A</option><option value="B">B</option>
+                    <option value="C">C</option><option value="D">D</option>
+                    <option value="E">E</option><option value="F">F</option>
+                    <option value="G">G</option><option value="H">H</option>
                 </select>
             </div>
         </div>
     </div>
 
-    <div class="total-box">
-        <span style="opacity: 0.9;">Total a pagar:</span>
-        <b id="total-display" style="font-size: 22px;">S/ 0.00</b>
+    <div class="total-card">
+        <span>Monto Total:</span>
+        <b id="total-text" style="font-size: 20px;">S/ 0.00</b>
     </div>
 
-    <button class="btn-send" onclick="enviar()">🚀 ENVIAR PEDIDO</button>
-    
-    <footer>Servicio de delivery escolar - Héctor Bites</footer>
+    <button class="btn-enviar" onclick="enviar()">🚀 ENVIAR PEDIDO</button>
+
+    <footer>Delivery Escolar - Héctor Bites</footer>
 </div>
 
 <script>
-    const precios = { p1: 0.5, p2: 1.0 };
-    const cantidades = { p1: 0, p2: 0 };
-    
-    const insultos = ["tonto", "bobo", "mierda", "estupido", "idiota", "ctm", "puto"]; 
+    let p1 = 0, p2 = 0;
+    const insultos = ["tonto", "bobo", "mierda", "estupido", "idiota", "ctm"];
 
-    function change(id, val) {
-        cantidades[id] = Math.max(0, cantidades[id] + val);
-        document.getElementById(id).innerText = cantidades[id];
-        let total = (cantidades.p1 * precios.p1) + (cantidades.p2 * precios.p2);
-        document.getElementById('total-display').innerText = `S/ ${total.toFixed(2)}`;
+    function cambiar(id, val) {
+        if(id === 'p1') p1 = Math.max(0, p1 + val);
+        if(id === 'p2') p2 = Math.max(0, p2 + val);
+        
+        document.getElementById('p1').innerText = p1;
+        document.getElementById('p2').innerText = p2;
+        
+        let total = (p1 * 0.5) + (p2 * 1.0);
+        document.getElementById('total-text').innerText = "S/ " + total.toFixed(2);
     }
 
     function enviar() {
-        let nombre = document.getElementById("nombre").value.toLowerCase().trim();
-        const grado = document.getElementById("grado").value;
-        const seccion = document.getElementById("seccion").value;
-        const total = document.getElementById("total-display").innerText;
+        let nombre = document.getElementById('nombre').value.trim();
+        let grado = document.getElementById('grado').value;
+        let seccion = document.getElementById('seccion').value;
+        let total = document.getElementById('total-text').innerText;
 
-        if (nombre.length < 3) {
-            alert("⚠️ Por favor, ingresa un nombre válido.");
-            return;
-        }
+        if(nombre.length < 3) return alert("Ingresa tu nombre");
+        if(insultos.some(i => nombre.toLowerCase().includes(i))) return alert("Nombre no permitido");
+        if(p1 === 0 && p2 === 0) return alert("Selecciona tus galletas");
 
-        let tieneInsulto = insultos.some(palabra => nombre.includes(palabra));
-        if (tieneInsulto) {
-            alert("🚫 Nombre no permitido. Sé respetuoso.");
-            return;
-        }
-
-        if (cantidades.p1 === 0 && cantidades.p2 === 0) {
-            alert("🛒 Selecciona cuántas galletas deseas pedir.");
-            return;
-        }
-
-        const msg = encodeURIComponent(
-            `*🍪 PEDIDO HÉCTOR BITES - GRAN AMAUTA*\n\n` +
-            `*Cliente:* ${nombre.toUpperCase()}\n` +
-            `*Grado:* ${grado}\n` +
-            `*Sección:* "${seccion}"\n` +
+        let msg = encodeURIComponent(
+            `*🍪 PEDIDO HÉCTOR BITES*\n` +
+            `*Nombre:* ${nombre.toUpperCase()}\n` +
+            `*Aula:* ${grado} "${seccion}"\n` +
             `--------------------------\n` +
-            `• Individuales: ${cantidades.p1}\n` +
-            `• Packs Duo: ${cantidades.p2}\n` +
+            `• Individuales: ${p1}\n` +
+            `• Packs Duo: ${p2}\n` +
             `--------------------------\n` +
-            `*Monto Total: ${total}*`
+            `*Monto: ${total}*`
         );
 
-        const numero = "51975754119"; // CAMBIA ESTO POR TU NÚMERO
-        window.open(`https://wa.me/${numero}?text=${msg}`, "_blank");
+        window.open(`https://wa.me/51999999999?text=${msg}`, "_blank");
     }
 </script>
 
