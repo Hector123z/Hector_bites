@@ -18,7 +18,7 @@
 
 body {
     background: var(--claro);
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
     margin: 0;
@@ -38,18 +38,18 @@ body {
 .header-ie h2 { margin: 0; color: var(--verde); font-size: 26px; }
 .header-ie p { margin: 2px 0; font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; }
 
-/* PRODUCTOS ESTILO ANTERIOR */
+/* Tarjetas de Producto Individuales */
 .producto-card {
     background: var(--gris-fondo);
     padding: 15px;
-    border-radius: 15px;
+    border-radius: 20px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
 }
 
-.controles { display: flex; align-items: center; gap: 10px; background: #fff; padding: 5px 12px; border-radius: 50px; }
+.controles { display: flex; align-items: center; gap: 12px; background: #fff; padding: 5px 10px; border-radius: 50px; }
 .btn-cant { width: 30px; height: 30px; border: none; border-radius: 50%; background: var(--verde); color: white; cursor: pointer; font-weight: bold; }
 
 input, select, textarea {
@@ -57,44 +57,88 @@ input, select, textarea {
 }
 
 .total-banner {
-    background: var(--verde-fuerte); color: #fff; padding: 15px; border-radius: 15px;
-    display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 18px; margin: 15px 0 10px;
+    background: var(--verde-fuerte);
+    color: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 15px 0 10px;
 }
 
 .aviso-entrega {
-    font-size: 11px; background: #fff3f3; color: #d32f2f; padding: 10px; border-radius: 10px;
-    text-align: center; border: 1px dashed #d32f2f; margin-bottom: 15px; font-weight: bold;
+    font-size: 11px;
+    background: #fff3f3;
+    color: #d32f2f;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px dashed #d32f2f;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .btn-wsp {
-    background: var(--wsp); color: white; border: none; width: 100%; padding: 16px; border-radius: 15px;
-    font-weight: bold; font-size: 16px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
+    background: var(--wsp);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
-/* PANEL OPINIONES DESLIZABLE */
-.opiniones-panel {
+/* Scroll para opiniones */
+.opiniones-container {
     max-height: 250px;
     overflow-y: auto;
-    background: #fafafa;
+    border: 1px solid #eee;
     border-radius: 15px;
     padding: 10px;
-    border: 1px solid #eee;
-    margin-top: 10px;
+    background: #fafafa;
 }
-.opiniones-panel::-webkit-scrollbar { width: 4px; }
-.opiniones-panel::-webkit-scrollbar-thumb { background: var(--verde); border-radius: 10px; }
 
-.review-card { background: white; padding: 12px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.review-card {
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
 
-/* SECCIONES DE INFO */
-.seccion-info { margin-top: 25px; padding: 15px; border-top: 2px solid var(--claro); }
-.seccion-info h4 { color: var(--verde); margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px; }
+.seccion-info {
+    margin-top: 25px;
+    padding: 15px;
+    border-top: 2px solid var(--claro);
+}
+.seccion-info h4 { color: var(--verde); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 
-.nutri-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.nutri-item { background: var(--gris-fondo); padding: 8px; border-radius: 8px; font-size: 12px; display: flex; justify-content: space-between; }
+.nutri-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.nutri-item {
+    background: var(--gris-fondo);
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+}
 
 .stars-input { display: flex; justify-content: center; gap: 5px; margin: 10px 0; font-size: 30px; cursor: pointer; }
-.star-on { color: var(--dorado); } .star-off { color: #ccc; }
+.star-off { color: #ccc; }
+.star-on { color: var(--dorado); }
 </style>
 </head>
 
@@ -107,24 +151,31 @@ input, select, textarea {
     </div>
 
     <div class="producto-card">
-        <div><b>1 Galleta</b><br><small>S/ 0.60</small></div>
+        <div>
+            <b>1 Galleta</b><br>
+            <small style="color: var(--verde); font-weight: bold;">S/ 0.60</small>
+        </div>
         <div class="controles">
-            <button class="btn-cant" onclick="cambiar('p1', -1)">-</button>
-            <b id="p1">0</b>
-            <button class="btn-cant" onclick="cambiar('p1', 1)">+</button>
+            <button class="btn-cant" onclick="cambiar('u', -1)">-</button>
+            <b id="cantU">0</b>
+            <button class="btn-cant" onclick="cambiar('u', 1)">+</button>
         </div>
     </div>
 
     <div class="producto-card">
-        <div><b>Pack Duo</b><br><small>S/ 1.00</small></div>
+        <div>
+            <b>Pack Duo</b><br>
+            <small style="color: var(--verde); font-weight: bold;">S/ 1.00</small>
+        </div>
         <div class="controles">
-            <button class="btn-cant" onclick="cambiar('p2', -1)">-</button>
-            <b id="p2">0</b>
-            <button class="btn-cant" onclick="cambiar('p2', 1)">+</button>
+            <button class="btn-cant" onclick="cambiar('p', -1)">-</button>
+            <b id="cantP">0</b>
+            <button class="btn-cant" onclick="cambiar('p', 1)">+</button>
         </div>
     </div>
 
-    <input id="pedNombre" placeholder="Tu nombre para el pedido">
+    <input id="pedNombre" placeholder="Escribe tu nombre">
+    
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         <select id="pedGrado">
             <option value="3ro Sec.">3ro Secundaria</option>
@@ -144,40 +195,34 @@ input, select, textarea {
         <span>S/ <span id="totalVal">0.00</span></span>
     </div>
 
-    <div class="aviso-entrega">🛵 ENTREGA EN RECREO - TURNO TARDE</div>
+    <div class="aviso-entrega">
+        🛵 Solo se entregará en el RECREO (Turno Tarde)
+    </div>
 
-    <button class="btn-wsp" onclick="enviarPedido()">
-        🚀 PEDIR POR WHATSAPP
+    <button class="btn-wsp" onclick="hacerPedido()">
+        <span>🚀</span> PEDIR POR WHATSAPP
     </button>
 
-    <hr style="margin: 30px 0; border: 0.5px solid #eee;">
+    <hr style="margin: 25px 0; border: 0.5px solid #eee;">
 
-    <h3 style="margin: 0;">⭐ Danos tu opinión</h3>
+    <h3>⭐ Comunidad</h3>
     <input id="revNombre" placeholder="Tu nombre">
     <div class="stars-input" id="starSelector">
         <span onclick="setRate(1)">★</span><span onclick="setRate(2)">★</span><span onclick="setRate(3)">★</span><span onclick="setRate(4)">★</span><span onclick="setRate(5)">★</span>
     </div>
-    <textarea id="revComento" rows="2" placeholder="¿Qué te parecieron las galletas?"></textarea>
-    <button id="btnPub" onclick="publicar()" style="background:var(--verde); color:white; border:none; width:100%; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer;">Publicar</button>
+    <textarea id="revComento" rows="2" placeholder="¿Qué tal las galletas?"></textarea>
+    <button id="btnPub" onclick="publicar()" style="background:var(--verde); color:white; border:none; width:100%; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer;">Publicar Opinión</button>
 
-    <div class="opiniones-panel" id="listaOpiniones"></div>
-
-    <div class="seccion-info">
-        <h4>🥣 Ingredientes</h4>
-        <p style="font-size: 13px; color: #555; line-height: 1.5; margin: 0;">
-            Harina de trigo, azúcar, avena, aceite vegetal, huevo, leche, polvo de hornear, sal y esencia de vainilla.
-        </p>
-    </div>
+    <div class="opiniones-container" id="listaOpiniones" style="margin-top: 15px;"></div>
 
     <div class="seccion-info">
-        <h4>📊 Información Nutricional (25g)</h4>
-        <div class="nutri-grid">
+        <h4>📊 Datos Nutricionales (25g)</h4>
+        <div class="nutri-table">
             <div class="nutri-item"><span>Energía</span> <b>110 kcal</b></div>
+            <div class="nutri-item"><span>Proteína</span> <b>2 g</b></div>
             <div class="nutri-item"><span>Grasas</span> <b>4 g</b></div>
             <div class="nutri-item"><span>Carbos</span> <b>16 g</b></div>
-            <div class="nutri-item"><span>Proteína</span> <b>2 g</b></div>
         </div>
-        <p style="font-size: 10px; color: #999; margin-top: 10px; text-align: center;">*Producto artesanal. Puede contener gluten y lácteos.</p>
     </div>
 </div>
 
@@ -200,28 +245,35 @@ const db = firebase.firestore();
 let myUid = "";
 firebase.auth().signInAnonymously().then(u => myUid = u.user.uid);
 
-// LÓGICA PEDIDOS
-let p1 = 0, p2 = 0;
-function cambiar(id, v) {
-    if(id === 'p1') p1 = Math.max(0, p1 + v);
-    if(id === 'p2') p2 = Math.max(0, p2 + v);
-    document.getElementById("p1").innerText = p1;
-    document.getElementById("p2").innerText = p2;
-    document.getElementById("totalVal").innerText = (p1 * 0.60 + p2 * 1.00).toFixed(2);
+// CONTROLES DE PEDIDO
+let unid = 0;
+let pack = 0;
+
+function cambiar(tipo, valor) {
+    if(tipo === 'u') unid = Math.max(0, unid + valor);
+    if(tipo === 'p') pack = Math.max(0, pack + valor);
+    
+    document.getElementById("cantU").innerText = unid;
+    document.getElementById("cantP").innerText = pack;
+    
+    let total = (unid * 0.60) + (pack * 1.00);
+    document.getElementById("totalVal").innerText = total.toFixed(2);
 }
 
-function enviarPedido() {
-    const n = document.getElementById("pedNombre").value;
-    const g = document.getElementById("pedGrado").value;
-    const s = document.getElementById("pedSeccion").value;
-    const t = document.getElementById("totalVal").innerText;
-    if(!n || (p1 == 0 && p2 == 0)) return alert("Completa tu nombre y pedido");
+function hacerPedido() {
+    const nom = document.getElementById("pedNombre").value;
+    const gra = document.getElementById("pedGrado").value;
+    const sec = document.getElementById("pedSeccion").value;
+    const tot = document.getElementById("totalVal").innerText;
+    
+    if(!nom || (unid === 0 && pack === 0)) return alert("Ingresa tu nombre y elige tus galletas");
 
-    const msg = `*PEDIDO HÉCTOR BITES*\n👤 *Alumno:* ${n}\n📍 *Aula:* ${g} "${s}"\n🍪 *1 Galleta:* ${p1}\n🎁 *Pack Duo:* ${p2}\n💰 *Total:* S/ ${t}\n\n_Entrega: Recreo - Turno Tarde_`;
+    const msg = `*PEDIDO HÉCTOR BITES*\n👤 *Nombre:* ${nom}\n📍 *Aula:* ${gra} "${sec}"\n🍪 *Unidades:* ${unid}\n🎁 *Packs Duo:* ${pack}\n💰 *Total:* S/ ${tot}\n\n_Entrega en el Recreo_`;
+    // TU NUEVO NÚMERO
     window.open(`https://wa.me/51975754119?text=${encodeURIComponent(msg)}`);
 }
 
-// LÓGICA RESEÑAS
+// LÓGICA DE RESEÑAS
 let currentRate = 0;
 function setRate(n) {
     currentRate = n;
@@ -229,15 +281,19 @@ function setRate(n) {
     for(let i=0; i<5; i++) stars[i].className = i < n ? "star-on" : "star-off";
 }
 
-let editId = null;
+let editingId = null;
 function publicar() {
-    const n = document.getElementById("revNombre").value;
-    const c = document.getElementById("revComento").value;
-    if(!n || !c || currentRate === 0) return alert("Llena tu opinión");
+    const nom = document.getElementById("revNombre").value;
+    const com = document.getElementById("revComento").value;
+    if(!nom || !com || currentRate === 0) return alert("Completa tu reseña");
 
-    const data = { nombre: n, comentario: c, estrellas: currentRate, fecha: Date.now(), author: myUid };
-    if(editId) {
-        db.collection("opiniones").doc(editId).update(data).then(() => { editId = null; document.getElementById("btnPub").innerText = "Publicar"; });
+    const data = { nombre: nom, comentario: com, estrellas: currentRate, fecha: Date.now(), author: myUid };
+
+    if(editingId) {
+        db.collection("opiniones").doc(editingId).update(data).then(() => {
+            editingId = null;
+            document.getElementById("btnPub").innerText = "Publicar Opinión";
+        });
     } else {
         db.collection("opiniones").add(data);
     }
@@ -250,19 +306,31 @@ db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
     snap.forEach(doc => {
         const op = doc.data();
         html += `<div class="review-card">
-            <div style="display:flex; justify-content:space-between"><b>${op.nombre}</b> <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span></div>
+            <div style="display:flex; justify-content:space-between">
+                <b style="color:var(--verde)">${op.nombre}</b>
+                <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span>
+            </div>
             <p style="font-size:13px; margin:5px 0;">${op.comentario}</p>
-            ${op.author === myUid ? `<div style="font-size:11px; text-align:right"><span onclick="preparaEdit('${doc.id}','${op.nombre}','${op.comentario}',${op.estrellas})" style="color:blue; cursor:pointer">✏️ Editar</span> | <span onclick="eliminar('${doc.id}')" style="color:red; cursor:pointer">🗑️ Borrar</span></div>` : ""}
+            ${op.author === myUid ? `<div style="text-align:right; font-size:11px;">
+                <span onclick="preparaEdit('${doc.id}','${op.nombre}','${op.comentario}',${op.estrellas})" style="color:blue; cursor:pointer">✏️ Editar</span> | 
+                <span onclick="eliminar('${doc.id}')" style="color:red; cursor:pointer">🗑️ Borrar</span>
+            </div>` : ""}
         </div>`;
     });
     document.getElementById("listaOpiniones").innerHTML = html;
 });
 
 function preparaEdit(id, n, c, e) {
-    editId = id; document.getElementById("revNombre").value = n; document.getElementById("revComento").value = c; setRate(e);
+    editingId = id;
+    document.getElementById("revNombre").value = n;
+    document.getElementById("revComento").value = c;
+    setRate(e);
     document.getElementById("btnPub").innerText = "Actualizar ✏️";
 }
-function eliminar(id) { if(confirm("¿Borrar?")) db.collection("opiniones").doc(id).delete(); }
+
+function eliminar(id) {
+    if(confirm("¿Borrar opinión?")) db.collection("opiniones").doc(id).delete();
+}
 </script>
 </body>
 </html>
