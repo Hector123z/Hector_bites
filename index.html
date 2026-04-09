@@ -12,6 +12,8 @@
     --wsp: #25D366;
     --dorado: #FFD700;
     --gris: #ccc;
+    --rojo: #e53935;
+    --azul: #1e88e5;
 }
 
 body {
@@ -32,7 +34,7 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,.1);
 }
 
-h2, h3 { color: var(--verde); text-align: center; }
+h2, h3 { color: var(--verde); text-align: center; margin-top: 0; }
 
 .producto {
     display: flex;
@@ -46,19 +48,21 @@ h2, h3 { color: var(--verde); text-align: center; }
 
 .controles { display: flex; align-items: center; gap: 10px; }
 .btn-cant { 
-    width: 30px; height: 30px; border: none; 
-    border-radius: 50%; background: #eee; cursor: pointer; font-weight: bold;
+    width: 32px; height: 32px; border: none; 
+    border-radius: 50%; background: #ddd; cursor: pointer; font-weight: bold;
 }
 
-input, textarea {
+input, textarea, select {
     width: 100%;
     padding: 12px;
-    margin: 10px 0;
+    margin: 8px 0;
     border: 1px solid #ddd;
     border-radius: 10px;
     box-sizing: border-box;
     font-size: 16px;
 }
+
+.grid-aula { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 .total {
     background: var(--verde);
@@ -84,33 +88,31 @@ input, textarea {
     font-size: 16px;
 }
 
-/* ⭐ SISTEMA DE ESTRELLAS */
-.rating-area {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    margin: 10px 0;
-}
-
-.star {
-    font-size: 35px;
-    color: var(--gris);
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
+.rating-area { display: flex; justify-content: center; gap: 5px; margin: 10px 0; }
+.star { font-size: 35px; color: var(--gris); cursor: pointer; }
 .star.active { color: var(--dorado); }
 
+/* ESTILO DE RESEÑAS */
 .review-card {
-    background: #f1f1f1;
+    background: #f9f9f9;
     padding: 15px;
     border-radius: 15px;
     margin-top: 15px;
+    position: relative;
+    border: 1px solid #eee;
 }
 
-.review-stars { color: var(--dorado); margin-bottom: 5px; }
+.review-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.review-user b { color: var(--verde); display: block; }
+.review-user small { color: #666; font-weight: bold; }
 
-#promedio { text-align: center; color: var(--verde); font-weight: bold; }
+.review-actions { display: flex; gap: 10px; }
+.btn-icon { background: none; border: none; cursor: pointer; font-size: 18px; padding: 5px; border-radius: 5px; transition: background 0.2s; }
+.btn-icon:hover { background: #eee; }
+
+.review-stars { color: var(--dorado); font-size: 14px; margin: 5px 0; }
+
+#promedio { text-align: center; color: var(--verde); margin: 20px 0 10px; }
 </style>
 </head>
 
@@ -143,8 +145,22 @@ input, textarea {
 
     <hr style="margin: 30px 0; border: 0.5px solid #eee;">
 
-    <h3>⭐ Danos tu opinión</h3>
+    <h3>⭐ Opiniones</h3>
     <input id="nombreReview" placeholder="Tu nombre">
+    
+    <div class="grid-aula">
+        <select id="grado">
+            <option value="3ro Sec.">3ro Secundaria</option>
+            <option value="4to Sec.">4to Secundaria</option>
+            <option value="5to Sec.">5to Secundaria</option>
+        </select>
+        <select id="seccion">
+            <option value="A">Sección A</option><option value="B">Sección B</option>
+            <option value="C">Sección C</option><option value="D">Sección D</option>
+            <option value="E">Sección E</option><option value="F">Sección F</option>
+            <option value="G">Sección G</option><option value="H">Sección H</option>
+        </select>
+    </div>
     
     <div class="rating-area" id="ratingArea">
         <span class="star" onclick="setRating(1)">★</span>
@@ -154,10 +170,10 @@ input, textarea {
         <span class="star" onclick="setRating(5)">★</span>
     </div>
 
-    <textarea id="comentario" rows="3" placeholder="¿Qué te parecieron las galletas?"></textarea>
-    <button class="btn-enviar" style="background: var(--verde);" onclick="publicar()">Publicar Reseña</button>
+    <textarea id="comentario" rows="2" placeholder="Escribe tu comentario..."></textarea>
+    <button id="btnPublicar" class="btn-enviar" style="background: var(--verde);" onclick="publicar()">Publicar Reseña</button>
 
-    <h4 id="promedio">Cargando promedio...</h4>
+    <h4 id="promedio">Promedio comunidad ⭐ 0.0</h4>
     <div id="opiniones"></div>
 </div>
 
@@ -166,7 +182,6 @@ input, textarea {
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
-// CONFIG FIREBASE (Tu misma configuración)
 const firebaseConfig = {
     apiKey: "AIzaSyAJb-fRgRJlMS1AZDmRs1iRZivbVb2xIaY",
     authDomain: "hector-bites.firebaseapp.com",
@@ -178,81 +193,109 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-firebase.auth().signInAnonymously();
+let userId = "";
+let editId = null;
 
-// LÓGICA DE PEDIDOS
+firebase.auth().signInAnonymously().then(user => {
+    userId = user.user.uid;
+});
+
+// PEDIDOS
 let p1=0, p2=0;
 function cambiar(id, val){
     if(id==="p1") p1 = Math.max(0, p1+val);
     if(id==="p2") p2 = Math.max(0, p2+val);
     document.getElementById("p1").innerText = p1;
     document.getElementById("p2").innerText = p2;
-    let total = (p1*0.5)+(p2*1);
-    document.getElementById("total").innerText = total.toFixed(2);
+    document.getElementById("total").innerText = ((p1*0.5)+p2).toFixed(2);
 }
 
 function enviar(){
-    let nombre = document.getElementById("nombre").value;
-    if(!nombre) return alert("Escribe tu nombre");
-    if(p1===0 && p2===0) return alert("Elige galletas");
-    let msg = `*PEDIDO HÉCTOR BITES*\nNombre: ${nombre}\n1 Galleta: ${p1}\nPack Duo: ${p2}\n*Total: S/ ${(p1*0.5+p2).toFixed(2)}*`;
-    window.open(`https://wa.me/51999999999?text=${encodeURIComponent(msg)}`);
+    let n = document.getElementById("nombre").value;
+    if(!n || (p1==0 && p2==0)) return alert("Completa el pedido");
+    window.open(`https://wa.me/51999999999?text=${encodeURIComponent("*PEDIDO HÉCTOR BITES*\nNombre: "+n+"\n1 Galleta: "+p1+"\nPack Duo: "+p2)}`);
 }
 
-// LÓGICA DE ESTRELLAS
+// ESTRELLAS
 let currentRating = 0;
 function setRating(n) {
     currentRating = n;
-    const stars = document.querySelectorAll('.star');
-    stars.forEach((star, index) => {
-        if(index < n) {
-            star.classList.add('active');
-        } else {
-            star.classList.remove('active');
-        }
-    });
+    document.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('active', i < n));
 }
 
+// PUBLICAR / EDITAR
 function publicar(){
-    let nombre = document.getElementById("nombreReview").value;
-    let comentario = document.getElementById("comentario").value;
+    const nombre = document.getElementById("nombreReview").value;
+    const grado = document.getElementById("grado").value;
+    const seccion = document.getElementById("seccion").value;
+    const comentario = document.getElementById("comentario").value;
 
-    if(!nombre || !comentario || currentRating === 0) return alert("Por favor, llena todos los campos y califica con estrellas.");
+    if(!nombre || !comentario || currentRating == 0) return alert("Llena todo");
 
-    db.collection("opiniones").add({
-        nombre,
-        comentario,
-        estrellas: currentRating,
-        fecha: Date.now()
-    }).then(() => {
-        document.getElementById("comentario").value = "";
-        document.getElementById("nombreReview").value = "";
-        setRating(0); // Reiniciar estrellas
-    });
+    const data = { nombre, grado, seccion, comentario, estrellas: currentRating, fecha: Date.now(), author: userId };
+
+    if(editId) {
+        db.collection("opiniones").doc(editId).update(data).then(() => {
+            editId = null;
+            document.getElementById("btnPublicar").innerText = "Publicar Reseña";
+        });
+    } else {
+        db.collection("opiniones").add(data);
+    }
+
+    document.getElementById("comentario").value = "";
+    setRating(0);
 }
 
-// CARGAR OPINIONES
+// ELIMINAR
+function eliminar(id) {
+    if(confirm("¿Eliminar este comentario?")) db.collection("opiniones").doc(id).delete();
+}
+
+// PREPARAR EDICIÓN
+function prepararEdicion(id, nombre, comentario, estrellas, grado, seccion) {
+    editId = id;
+    document.getElementById("nombreReview").value = nombre;
+    document.getElementById("comentario").value = comentario;
+    document.getElementById("grado").value = grado;
+    document.getElementById("seccion").value = seccion;
+    setRating(estrellas);
+    document.getElementById("btnPublicar").innerText = "Actualizar Reseña ✏️";
+    window.scrollTo({ top: 500, behavior: 'smooth' });
+}
+
+// ESCUCHAR FIREBASE
 db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
     let html = "";
-    let totalEstrellas = 0;
-    let totalOpiniones = 0;
+    let tE = 0, tO = 0;
 
     snap.forEach(doc => {
         let op = doc.data();
-        totalEstrellas += op.estrellas;
-        totalOpiniones++;
+        tE += op.estrellas; tO++;
+
+        // Solo mostrar botones si el usuario es el autor
+        let buttons = (op.author === userId) ? `
+            <div class="review-actions">
+                <button class="btn-icon" onclick="prepararEdicion('${doc.id}', '${op.nombre}', '${op.comentario}', ${op.estrellas}, '${op.grado}', '${op.seccion}')">✏️</button>
+                <button class="btn-icon" style="color:var(--rojo)" onclick="eliminar('${doc.id}')">🗑️</button>
+            </div>` : "";
 
         html += `
         <div class="review-card">
-            <b>${op.nombre}</b>
+            <div class="review-header">
+                <div class="review-user">
+                    <b>${op.nombre}</b>
+                    <small>${op.grado} "${op.seccion}"</small>
+                </div>
+                ${buttons}
+            </div>
             <div class="review-stars">${"★".repeat(op.estrellas)}${"☆".repeat(5-op.estrellas)}</div>
-            <div style="font-size:14px; color:#444;">${op.comentario}</div>
+            <div style="font-size:14px;">${op.comentario}</div>
         </div>`;
     });
 
     document.getElementById("opiniones").innerHTML = html;
-    let prom = totalOpiniones ? (totalEstrellas / totalOpiniones).toFixed(1) : 0;
-    document.getElementById("promedio").innerText = `Promedio de la comunidad: ⭐ ${prom}`;
+    document.getElementById("promedio").innerText = `Promedio comunidad ⭐ ${tO ? (tE/tO).toFixed(1) : 0}`;
 });
 </script>
 </body>
