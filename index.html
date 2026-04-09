@@ -1,243 +1,215 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Héctor Bites | Gran Amauta</title>
-    <style>
-        :root {
-            --verde-amauta: #1b5e20;
-            --verde-claro: #f1f8e9;
-            --whatsapp: #25D366;
-            --blanco: #ffffff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Héctor Bites</title>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+<style>
+:root {
+--verde:#1b5e20;
+--claro:#f1f8e9;
+--wsp:#25D366;
+}
 
-        body {
-            background-color: var(--verde-claro);
-            display: flex;
-            justify-content: center;
-            padding: 15px;
-        }
+body{
+background:var(--claro);
+font-family:sans-serif;
+display:flex;
+justify-content:center;
+}
 
-        /* Contenedor principal VERTICAL */
-        .container {
-            background: var(--blanco);
-            width: 100%;
-            max-width: 400px;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column; /* Alinea todo hacia abajo */
-            align-items: center;
-        }
+.container{
+background:#fff;
+max-width:400px;
+width:100%;
+padding:20px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
 
-        .insignia {
-            width: 80px;
-            height: auto;
-            margin-bottom: 10px;
-        }
+.producto{
+display:flex;
+justify-content:space-between;
+margin:10px 0;
+}
 
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { color: var(--verde-amauta); font-size: 26px; }
-        .header p { color: #666; font-size: 14px; font-weight: bold; }
+.btn{padding:5px 10px;border:none;border-radius:10px;}
 
-        /* Tarjetas de Producto */
-        .producto {
-            width: 100%;
-            background: #fdfdfd;
-            border: 1px solid #eee;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.total{background:var(--verde);color:#fff;padding:10px;border-radius:10px;margin-top:10px;}
 
-        .prod-info b { display: block; font-size: 16px; }
-        .prod-info span { font-size: 13px; color: var(--verde-amauta); font-weight: bold; }
+.btn-enviar{
+background:var(--wsp);
+color:#fff;
+padding:15px;
+width:100%;
+border:none;
+border-radius:10px;
+margin-top:10px;
+}
 
-        .contador {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #eee;
-            padding: 5px 10px;
-            border-radius: 50px;
-        }
-
-        .btn-count {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: none;
-            background: var(--blanco);
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        /* Formulario */
-        .formulario { width: 100%; margin-top: 15px; }
-        label { font-size: 12px; font-weight: bold; color: var(--verde-amauta); display: block; margin-bottom: 5px; }
-        
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 2px solid #eee;
-            margin-bottom: 15px;
-            font-size: 15px;
-        }
-
-        .grid-selects {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        /* Caja de Total */
-        .total-card {
-            width: 100%;
-            background: var(--verde-amauta);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        /* Botón Enviar */
-        .btn-enviar {
-            width: 100%;
-            background: var(--whatsapp);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 15px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-        }
-
-        footer { margin-top: 20px; font-size: 11px; color: #999; }
-    </style>
+#estrellas span{
+font-size:25px;
+cursor:pointer;
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_mR2A4R9JvO2_lF7S6V6eF_I7mGZ-E6tZSQ&s" alt="Insignia Amauta" class="insignia">
-    
-    <div class="header">
-        <h1>Héctor Bites 🍪</h1>
-        <p>I.E. 3037 GRAN AMAUTA</p>
-    </div>
 
-    <div class="producto">
-        <div class="prod-info">
-            <b>1 Galleta</b>
-            <span>S/ 0.50</span>
-        </div>
-        <div class="contador">
-            <button class="btn-count" onclick="cambiar('p1', -1)">-</button>
-            <span id="p1" style="font-weight:bold">0</span>
-            <button class="btn-count" onclick="cambiar('p1', 1)">+</button>
-        </div>
-    </div>
+<h2>🍪 Héctor Bites</h2>
 
-    <div class="producto">
-        <div class="prod-info">
-            <b>Pack Duo</b>
-            <span>S/ 1.00</span>
-        </div>
-        <div class="contador">
-            <button class="btn-count" onclick="cambiar('p2', -1)">-</button>
-            <span id="p2" style="font-weight:bold">0</span>
-            <button class="btn-count" onclick="cambiar('p2', 1)">+</button>
-        </div>
-    </div>
-
-    <div class="formulario">
-        <label>NOMBRE COMPLETO</label>
-        <input type="text" id="nombre" placeholder="Escribe tu nombre">
-
-        <div class="grid-selects">
-            <div>
-                <label>GRADO</label>
-                <select id="grado">
-                    <option value="3ro Secundaria">3ro Secundaria</option>
-                    <option value="4to Secundaria">4to Secundaria</option>
-                    <option value="5to Secundaria" selected>5to Secundaria</option>
-                </select>
-            </div>
-            <div>
-                <label>SECCIÓN</label>
-                <select id="seccion">
-                    <option value="A">A</option><option value="B">B</option>
-                    <option value="C">C</option><option value="D">D</option>
-                    <option value="E">E</option><option value="F">F</option>
-                    <option value="G">G</option><option value="H">H</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <div class="total-card">
-        <span>Monto Total:</span>
-        <b id="total-text" style="font-size: 20px;">S/ 0.00</b>
-    </div>
-
-    <button class="btn-enviar" onclick="enviar()">🚀 ENVIAR PEDIDO</button>
-
-    <footer>Delivery Escolar - Héctor Bites</footer>
+<!-- PRODUCTOS -->
+<div class="producto">
+1 Galleta S/0.50
+<div>
+<button onclick="cambiar('p1',-1)">-</button>
+<span id="p1">0</span>
+<button onclick="cambiar('p1',1)">+</button>
+</div>
 </div>
 
+<div class="producto">
+Pack Duo S/1.00
+<div>
+<button onclick="cambiar('p2',-1)">-</button>
+<span id="p2">0</span>
+<button onclick="cambiar('p2',1)">+</button>
+</div>
+</div>
+
+<input id="nombre" placeholder="Nombre">
+
+<div class="total">Total: <span id="total">0</span></div>
+
+<button class="btn-enviar" onclick="enviar()">Pedir</button>
+
+<hr>
+
+<!-- ⭐ OPINIONES -->
+<h3>⭐ Opiniones</h3>
+
+<input id="nombreReview" placeholder="Tu nombre">
+
+<div id="estrellas">
+<span onclick="setRating(1)">⭐</span>
+<span onclick="setRating(2)">⭐</span>
+<span onclick="setRating(3)">⭐</span>
+<span onclick="setRating(4)">⭐</span>
+<span onclick="setRating(5)">⭐</span>
+</div>
+
+<textarea id="comentario" placeholder="Comentario"></textarea>
+
+<button class="btn-enviar" onclick="publicar()">Publicar</button>
+
+<h4 id="promedio"></h4>
+
+<div id="opiniones"></div>
+
+</div>
+
+<!-- 🔥 FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
 <script>
-    let p1 = 0, p2 = 0;
-    const insultos = ["tonto", "bobo", "mierda", "estupido", "idiota", "ctm"];
 
-    function cambiar(id, val) {
-        if(id === 'p1') p1 = Math.max(0, p1 + val);
-        if(id === 'p2') p2 = Math.max(0, p2 + val);
-        
-        document.getElementById('p1').innerText = p1;
-        document.getElementById('p2').innerText = p2;
-        
-        let total = (p1 * 0.5) + (p2 * 1.0);
-        document.getElementById('total-text').innerText = "S/ " + total.toFixed(2);
-    }
+// 🔥 CONFIG
+const firebaseConfig = {
+apiKey: "AIzaSyAJb-fRgRJlMS1AZDmRs1iRZivbVb2xIaY",
+authDomain: "hector-bites.firebaseapp.com",
+projectId: "hector-bites",
+storageBucket: "hector-bites.firebasestorage.app",
+messagingSenderId: "871681076585",
+appId: "1:871681076585:web:ef3ead36c2b21ec70021f8"
+};
 
-    function enviar() {
-        let nombre = document.getElementById('nombre').value.trim();
-        let grado = document.getElementById('grado').value;
-        let seccion = document.getElementById('seccion').value;
-        let total = document.getElementById('total-text').innerText;
+firebase.initializeApp(firebaseConfig);
 
-        if(nombre.length < 3) return alert("Ingresa tu nombre");
-        if(insultos.some(i => nombre.toLowerCase().includes(i))) return alert("Nombre no permitido");
-        if(p1 === 0 && p2 === 0) return alert("Selecciona tus galletas");
+const db = firebase.firestore();
+const auth = firebase.auth();
 
-        let msg = encodeURIComponent(
-            `*🍪 PEDIDO HÉCTOR BITES*\n` +
-            `*Nombre:* ${nombre.toUpperCase()}\n` +
-            `*Aula:* ${grado} "${seccion}"\n` +
-            `--------------------------\n` +
-            `• Individuales: ${p1}\n` +
-            `• Packs Duo: ${p2}\n` +
-            `--------------------------\n` +
-            `*Monto: ${total}*`
-        );
+// 🔐 LOGIN AUTOMÁTICO
+auth.signInAnonymously();
 
-        window.open(`https://wa.me/51975754119?text=${msg}`, "_blank");
-    }
+// 🧮 PEDIDOS
+let p1=0,p2=0;
+
+function cambiar(id,val){
+if(id==="p1")p1=Math.max(0,p1+val);
+if(id==="p2")p2=Math.max(0,p2+val);
+
+document.getElementById("p1").innerText=p1;
+document.getElementById("p2").innerText=p2;
+
+let total=(p1*0.5)+(p2*1);
+document.getElementById("total").innerText=total.toFixed(2);
+}
+
+// 📲 WHATSAPP
+function enviar(){
+let nombre=document.getElementById("nombre").value;
+
+let msg=`Pedido\n${nombre}\n1:${p1}\n2:${p2}`;
+
+window.open(`https://wa.me/51999999999?text=${encodeURIComponent(msg)}`);
+}
+
+// ⭐ RESEÑAS GLOBAL
+let rating=0;
+
+function setRating(n){rating=n;}
+
+function publicar(){
+let nombre=document.getElementById("nombreReview").value;
+let comentario=document.getElementById("comentario").value;
+
+if(!nombre||!comentario||rating==0)return alert("Completa todo");
+
+db.collection("opiniones").add({
+nombre,
+comentario,
+estrellas:rating,
+fecha:Date.now()
+});
+
+document.getElementById("comentario").value="";
+}
+
+// 👀 MOSTRAR
+db.collection("opiniones")
+.orderBy("fecha","desc")
+.onSnapshot(snap=>{
+
+let html="";
+let total=0;
+let count=0;
+
+snap.forEach(doc=>{
+let op=doc.data();
+total+=op.estrellas;
+count++;
+
+html+=`
+<div style="background:#eee;padding:10px;margin:10px;border-radius:10px">
+<b>${op.nombre}</b><br>
+${"⭐".repeat(op.estrellas)}<br>
+${op.comentario}
+</div>`;
+});
+
+document.getElementById("opiniones").innerHTML=html;
+
+let prom=count?(total/count).toFixed(1):0;
+document.getElementById("promedio").innerText="Promedio ⭐ "+prom;
+
+});
+
 </script>
 
 </body>
-</html>
+</html> 
