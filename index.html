@@ -38,7 +38,7 @@ body {
 .header-ie h2 { margin: 0; color: var(--verde); font-size: 26px; }
 .header-ie p { margin: 2px 0; font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; }
 
-/* Tarjetas de Producto Individuales */
+/* Tarjetas de Producto estilo anterior */
 .producto-card {
     background: var(--gris-fondo);
     padding: 15px;
@@ -97,7 +97,7 @@ input, select, textarea {
     gap: 10px;
 }
 
-/* Scroll para opiniones */
+/* Panel de Opiniones Deslizable */
 .opiniones-container {
     max-height: 250px;
     overflow-y: auto;
@@ -105,7 +105,10 @@ input, select, textarea {
     border-radius: 15px;
     padding: 10px;
     background: #fafafa;
+    margin-top: 15px;
 }
+.opiniones-container::-webkit-scrollbar { width: 4px; }
+.opiniones-container::-webkit-scrollbar-thumb { background: var(--verde); border-radius: 10px; }
 
 .review-card {
     background: white;
@@ -115,12 +118,13 @@ input, select, textarea {
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
+/* Info Nutricional y Receta */
 .seccion-info {
     margin-top: 25px;
     padding: 15px;
     border-top: 2px solid var(--claro);
 }
-.seccion-info h4 { color: var(--verde); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.seccion-info h4 { color: var(--verde); margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px; }
 
 .nutri-table {
     display: grid;
@@ -174,7 +178,7 @@ input, select, textarea {
         </div>
     </div>
 
-    <input id="pedNombre" placeholder="Escribe tu nombre">
+    <input id="pedNombre" placeholder="Tu nombre para el pedido">
     
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         <select id="pedGrado">
@@ -196,16 +200,16 @@ input, select, textarea {
     </div>
 
     <div class="aviso-entrega">
-        🛵 Solo se entregará en el RECREO (Turno Tarde)
+        🛵 ENTREGA EN RECREO - TURNO TARDE
     </div>
 
-    <button class="btn-wsp" onclick="hacerPedido()">
+    <button class="btn-wsp" onclick="enviarPedido()">
         <span>🚀</span> PEDIR POR WHATSAPP
     </button>
 
     <hr style="margin: 25px 0; border: 0.5px solid #eee;">
 
-    <h3>⭐ Comunidad</h3>
+    <h3 style="margin: 0;">⭐ Comunidad</h3>
     <input id="revNombre" placeholder="Tu nombre">
     <div class="stars-input" id="starSelector">
         <span onclick="setRate(1)">★</span><span onclick="setRate(2)">★</span><span onclick="setRate(3)">★</span><span onclick="setRate(4)">★</span><span onclick="setRate(5)">★</span>
@@ -213,16 +217,29 @@ input, select, textarea {
     <textarea id="revComento" rows="2" placeholder="¿Qué tal las galletas?"></textarea>
     <button id="btnPub" onclick="publicar()" style="background:var(--verde); color:white; border:none; width:100%; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer;">Publicar Opinión</button>
 
-    <div class="opiniones-container" id="listaOpiniones" style="margin-top: 15px;"></div>
+    <div class="opiniones-container" id="listaOpiniones"></div>
 
     <div class="seccion-info">
-        <h4>📊 Datos Nutricionales (25g)</h4>
+        <h4>🥣 Receta e Ingredientes</h4>
+        <p style="font-size: 13px; color: #555; line-height: 1.6; margin: 0;">
+            Harina de trigo, azúcar, avena, aceite vegetal, huevo, leche, polvo de hornear, sal y esencia de vainilla. 
+            <i>Elaborado de forma artesanal.</i>
+        </p>
+    </div>
+
+    <div class="seccion-info">
+        <h4>📊 Información Nutricional (25g)</h4>
         <div class="nutri-table">
             <div class="nutri-item"><span>Energía</span> <b>110 kcal</b></div>
-            <div class="nutri-item"><span>Proteína</span> <b>2 g</b></div>
             <div class="nutri-item"><span>Grasas</span> <b>4 g</b></div>
             <div class="nutri-item"><span>Carbos</span> <b>16 g</b></div>
+            <div class="nutri-item"><span>Azúcares</span> <b>6 g</b></div>
+            <div class="nutri-item"><span>Proteína</span> <b>2 g</b></div>
+            <div class="nutri-item"><span>Fibra</span> <b>1 g</b></div>
         </div>
+        <p style="font-size: 10px; color: #999; margin-top: 10px; text-align: center;">
+            *Puede contener trazas de gluten, huevo y lácteos.
+        </p>
     </div>
 </div>
 
@@ -245,10 +262,8 @@ const db = firebase.firestore();
 let myUid = "";
 firebase.auth().signInAnonymously().then(u => myUid = u.user.uid);
 
-// CONTROLES DE PEDIDO
-let unid = 0;
-let pack = 0;
-
+// LÓGICA DE PEDIDOS
+let unid = 0, pack = 0;
 function cambiar(tipo, valor) {
     if(tipo === 'u') unid = Math.max(0, unid + valor);
     if(tipo === 'p') pack = Math.max(0, pack + valor);
@@ -260,16 +275,16 @@ function cambiar(tipo, valor) {
     document.getElementById("totalVal").innerText = total.toFixed(2);
 }
 
-function hacerPedido() {
-    const nom = document.getElementById("pedNombre").value;
-    const gra = document.getElementById("pedGrado").value;
-    const sec = document.getElementById("pedSeccion").value;
-    const tot = document.getElementById("totalVal").innerText;
+function enviarPedido() {
+    const n = document.getElementById("pedNombre").value;
+    const g = document.getElementById("pedGrado").value;
+    const s = document.getElementById("pedSeccion").value;
+    const t = document.getElementById("totalVal").innerText;
     
-    if(!nom || (unid === 0 && pack === 0)) return alert("Ingresa tu nombre y elige tus galletas");
+    if(!n || (unid === 0 && pack === 0)) return alert("Completa tu nombre y pedido");
 
-    const msg = `*PEDIDO HÉCTOR BITES*\n👤 *Nombre:* ${nom}\n📍 *Aula:* ${gra} "${sec}"\n🍪 *Unidades:* ${unid}\n🎁 *Packs Duo:* ${pack}\n💰 *Total:* S/ ${tot}\n\n_Entrega en el Recreo_`;
-    // TU NUEVO NÚMERO
+    const msg = `*PEDIDO HÉCTOR BITES*\n👤 *Alumno:* ${n}\n📍 *Aula:* ${g} "${s}"\n🍪 *1 Galleta:* ${unid}\n🎁 *Pack Duo:* ${pack}\n💰 *Total:* S/ ${t}\n\n_Entrega en el Recreo - Turno Tarde_`;
+    // TU NÚMERO ACTUALIZADO
     window.open(`https://wa.me/51975754119?text=${encodeURIComponent(msg)}`);
 }
 
@@ -288,7 +303,6 @@ function publicar() {
     if(!nom || !com || currentRate === 0) return alert("Completa tu reseña");
 
     const data = { nombre: nom, comentario: com, estrellas: currentRate, fecha: Date.now(), author: myUid };
-
     if(editingId) {
         db.collection("opiniones").doc(editingId).update(data).then(() => {
             editingId = null;
@@ -301,16 +315,14 @@ function publicar() {
     setRate(0);
 }
 
+// MOSTRAR RESEÑAS
 db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
     let html = "";
     snap.forEach(doc => {
         const op = doc.data();
         html += `<div class="review-card">
-            <div style="display:flex; justify-content:space-between">
-                <b style="color:var(--verde)">${op.nombre}</b>
-                <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span>
-            </div>
-            <p style="font-size:13px; margin:5px 0;">${op.comentario}</p>
+            <div style="display:flex; justify-content:space-between"><b style="color:var(--verde)">${op.nombre}</b> <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span></div>
+            <p style="font-size:13px; margin:5px 0; color:#444">${op.comentario}</p>
             ${op.author === myUid ? `<div style="text-align:right; font-size:11px;">
                 <span onclick="preparaEdit('${doc.id}','${op.nombre}','${op.comentario}',${op.estrellas})" style="color:blue; cursor:pointer">✏️ Editar</span> | 
                 <span onclick="eliminar('${doc.id}')" style="color:red; cursor:pointer">🗑️ Borrar</span>
@@ -327,10 +339,7 @@ function preparaEdit(id, n, c, e) {
     setRate(e);
     document.getElementById("btnPub").innerText = "Actualizar ✏️";
 }
-
-function eliminar(id) {
-    if(confirm("¿Borrar opinión?")) db.collection("opiniones").doc(id).delete();
-}
+function eliminar(id) { if(confirm("¿Borrar opinión?")) db.collection("opiniones").doc(id).delete(); }
 </script>
 </body>
 </html>
