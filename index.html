@@ -8,173 +8,245 @@
 <style>
 :root {
     --verde: #1b5e20;
+    --verde-fuerte: #0a3d0d;
     --claro: #f1f8e9;
     --wsp: #25D366;
     --dorado: #FFD700;
-    --gris: #ccc;
+    --gris-fondo: #f4f4f4;
     --rojo: #e53935;
-    --azul: #1e88e5;
 }
 
 body {
     background: var(--claro);
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
     margin: 0;
-    padding: 20px;
+    padding: 15px;
 }
 
 .container {
     background: #fff;
-    max-width: 400px;
+    max-width: 420px;
     width: 100%;
-    padding: 25px;
-    border-radius: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.1);
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,.1);
 }
 
-h2, h3 { color: var(--verde); text-align: center; margin-top: 0; }
+/* Encabezado Estilo I.E. */
+.header-ie {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.header-ie h2 { margin: 0; color: var(--verde); font-size: 26px; }
+.header-ie p { margin: 2px 0; font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; }
 
-.producto {
+/* Tarjetas de Producto */
+.card-pedido {
+    background: var(--gris-fondo);
+    padding: 18px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+
+.producto-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #f9f9f9;
+    margin-bottom: 15px;
+}
+
+.precio-badge {
+    background: var(--verde);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.controles { display: flex; align-items: center; gap: 12px; background: #fff; padding: 5px 10px; border-radius: 50px; }
+.btn-cant { width: 30px; height: 30px; border: none; border-radius: 50%; background: var(--verde); color: white; cursor: pointer; font-weight: bold; }
+
+input, select, textarea {
+    width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 15px; box-sizing: border-box;
+}
+
+.total-banner {
+    background: var(--verde-fuerte);
+    color: #fff;
     padding: 15px;
     border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.aviso-entrega {
+    font-size: 11px;
+    background: #fff3f3;
+    color: #d32f2f;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px dashed #d32f2f;
     margin-bottom: 10px;
 }
 
-.controles { display: flex; align-items: center; gap: 10px; }
-.btn-cant { 
-    width: 32px; height: 32px; border: none; 
-    border-radius: 50%; background: #ddd; cursor: pointer; font-weight: bold;
-}
-
-input, textarea, select {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-sizing: border-box;
-    font-size: 16px;
-}
-
-.grid-aula { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.total {
-    background: var(--verde);
-    color: #fff;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 15px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.btn-enviar {
-    background: var(--wsp);
-    color: #fff;
-    padding: 15px;
-    width: 100%;
-    border: none;
-    border-radius: 12px;
-    margin-top: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.rating-area { display: flex; justify-content: center; gap: 5px; margin: 10px 0; }
-.star { font-size: 35px; color: var(--gris); cursor: pointer; }
-.star.active { color: var(--dorado); }
-
-/* ESTILO DE RESEÑAS */
-.review-card {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 15px;
-    margin-top: 15px;
-    position: relative;
+/* Panel de Opiniones Deslizable */
+.opiniones-container {
+    max-height: 280px;
+    overflow-y: auto;
     border: 1px solid #eee;
+    border-radius: 15px;
+    padding: 10px;
+    background: #fafafa;
+}
+.opiniones-container::-webkit-scrollbar { width: 4px; }
+.opiniones-container::-webkit-scrollbar-thumb { background: var(--verde); border-radius: 10px; }
+
+.review-card {
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.review-header { display: flex; justify-content: space-between; align-items: flex-start; }
-.review-user b { color: var(--verde); display: block; }
-.review-user small { color: #666; font-weight: bold; }
+/* Info Nutricional y Receta */
+.seccion-info {
+    margin-top: 25px;
+    padding: 15px;
+    border-top: 2px solid var(--claro);
+}
+.seccion-info h4 { color: var(--verde); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 
-.review-actions { display: flex; gap: 10px; }
-.btn-icon { background: none; border: none; cursor: pointer; font-size: 18px; padding: 5px; border-radius: 5px; transition: background 0.2s; }
-.btn-icon:hover { background: #eee; }
+.nutri-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.nutri-item {
+    background: var(--gris-fondo);
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+}
 
-.review-stars { color: var(--dorado); font-size: 14px; margin: 5px 0; }
+.btn-wsp {
+    background: var(--wsp);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 
-#promedio { text-align: center; color: var(--verde); margin: 20px 0 10px; }
+.stars-input { display: flex; justify-content: center; gap: 5px; margin: 10px 0; font-size: 30px; cursor: pointer; }
+.star-off { color: #ccc; }
+.star-on { color: var(--dorado); }
 </style>
 </head>
 
 <body>
 
 <div class="container">
-    <h2>🍪 Héctor Bites</h2>
+    <div class="header-ie">
+        <h2>Héctor Bites 🍪</h2>
+        <p>I.E. Gran Amauta 3037</p>
+    </div>
 
-    <div class="producto">
-        <div><b>1 Galleta</b><br><small>S/0.50</small></div>
-        <div class="controles">
-            <button class="btn-cant" onclick="cambiar('p1',-1)">-</button>
-            <span id="p1">0</span>
-            <button class="btn-cant" onclick="cambiar('p1',1)">+</button>
+    <div class="card-pedido">
+        <div class="producto-row">
+            <div>
+                <b>Galletas Artesanales</b><br>
+                <span class="precio-badge">S/ 0.60 u. | 2 por S/ 1.00</span>
+            </div>
+            <div class="controles">
+                <button class="btn-cant" onclick="updateCant(-1)">-</button>
+                <b id="cantDisplay">0</b>
+                <button class="btn-cant" onclick="updateCant(1)">+</button>
+            </div>
         </div>
-    </div>
 
-    <div class="producto">
-        <div><b>Pack Duo</b><br><small>S/1.00</small></div>
-        <div class="controles">
-            <button class="btn-cant" onclick="cambiar('p2',-1)">-</button>
-            <span id="p2">0</span>
-            <button class="btn-cant" onclick="cambiar('p2',1)">+</button>
+        <input id="pedNombre" placeholder="Escribe tu nombre">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <select id="pedGrado">
+                <option value="3ro Sec.">3ro Secundaria</option>
+                <option value="4to Sec.">4to Secundaria</option>
+                <option value="5to Sec.">5to Secundaria</option>
+            </select>
+            <select id="pedSeccion">
+                <option value="A">Secc. A</option><option value="B">Secc. B</option>
+                <option value="C">Secc. C</option><option value="D">Secc. D</option>
+                <option value="E">Secc. E</option><option value="F">Secc. F</option>
+                <option value="G">Secc. G</option><option value="H">Secc. H</option>
+            </select>
         </div>
+
+        <div class="total-banner">
+            <span>Total a pagar:</span>
+            <span>S/ <span id="totalVal">0.00</span></span>
+        </div>
+
+        <div class="aviso-entrega">
+            🛵 Solo se entregará en el <b>RECREO</b> (Turno Tarde)
+        </div>
+
+        <button class="btn-wsp" onclick="hacerPedido()">
+            <span>📲</span> ENVIAR PEDIDO POR WHATSAPP
+        </button>
     </div>
 
-    <input id="nombre" placeholder="Tu nombre para el pedido">
-    <div class="total">Total: S/ <span id="total">0.00</span></div>
-    <button class="btn-enviar" onclick="enviar()">🚀 Pedir por WhatsApp</button>
-
-    <hr style="margin: 30px 0; border: 0.5px solid #eee;">
-
-    <h3>⭐ Opiniones</h3>
-    <input id="nombreReview" placeholder="Tu nombre">
-    
-    <div class="grid-aula">
-        <select id="grado">
-            <option value="3ro Sec.">3ro Secundaria</option>
-            <option value="4to Sec.">4to Secundaria</option>
-            <option value="5to Sec.">5to Secundaria</option>
-        </select>
-        <select id="seccion">
-            <option value="A">Sección A</option><option value="B">Sección B</option>
-            <option value="C">Sección C</option><option value="D">Sección D</option>
-            <option value="E">Sección E</option><option value="F">Sección F</option>
-            <option value="G">Sección G</option><option value="H">Sección H</option>
-        </select>
-    </div>
-    
-    <div class="rating-area" id="ratingArea">
-        <span class="star" onclick="setRating(1)">★</span>
-        <span class="star" onclick="setRating(2)">★</span>
-        <span class="star" onclick="setRating(3)">★</span>
-        <span class="star" onclick="setRating(4)">★</span>
-        <span class="star" onclick="setRating(5)">★</span>
+    <h3 style="text-align: left; margin-left: 10px;">⭐ Comunidad</h3>
+    <div style="padding: 0 10px 20px;">
+        <input id="revNombre" placeholder="Tu nombre">
+        <div class="stars-input" id="starSelector">
+            <span onclick="setRate(1)">★</span><span onclick="setRate(2)">★</span><span onclick="setRate(3)">★</span><span onclick="setRate(4)">★</span><span onclick="setRate(5)">★</span>
+        </div>
+        <textarea id="revComento" rows="2" placeholder="¿Qué tal las galletas?"></textarea>
+        <button id="btnPub" onclick="publicar()" style="background:var(--verde); color:white; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold;">Publicar Opinión</button>
     </div>
 
-    <textarea id="comentario" rows="2" placeholder="Escribe tu comentario..."></textarea>
-    <button id="btnPublicar" class="btn-enviar" style="background: var(--verde);" onclick="publicar()">Publicar Reseña</button>
+    <div class="opiniones-container" id="listaOpiniones">
+        </div>
 
-    <h4 id="promedio">Promedio comunidad ⭐ 0.0</h4>
-    <div id="opiniones"></div>
+    <div class="seccion-info">
+        <h4>🥣 Receta e Ingredientes</h4>
+        <p style="font-size: 13px; color: #555; line-height: 1.6;">
+            Harina de trigo, azúcar, avena, aceite vegetal, huevo, leche, polvo de hornear, sal y esencia de vainilla. 
+            <i>Elaborado de forma artesanal.</i>
+        </p>
+    </div>
+
+    <div class="seccion-info">
+        <h4>📊 Información Nutricional (25g)</h4>
+        <div class="nutri-table">
+            <div class="nutri-item"><span>Energía</span> <b>110 kcal</b></div>
+            <div class="nutri-item"><span>Grasas</span> <b>4 g</b></div>
+            <div class="nutri-item"><span>Carbos</span> <b>16 g</b></div>
+            <div class="nutri-item"><span>Azúcares</span> <b>6 g</b></div>
+            <div class="nutri-item"><span>Proteína</span> <b>2 g</b></div>
+            <div class="nutri-item"><span>Fibra</span> <b>1 g</b></div>
+        </div>
+        <p style="font-size: 10px; color: #999; margin-top: 10px;">
+            *Puede contener trazas de gluten, huevo y lácteos.
+        </p>
+    </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -182,6 +254,7 @@ input, textarea, select {
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
+// CONFIGURACIÓN FIREBASE
 const firebaseConfig = {
     apiKey: "AIzaSyAJb-fRgRJlMS1AZDmRs1iRZivbVb2xIaY",
     authDomain: "hector-bites.firebaseapp.com",
@@ -193,110 +266,100 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-let userId = "";
-let editId = null;
+let myUid = "";
+firebase.auth().signInAnonymously().then(u => myUid = u.user.uid);
 
-firebase.auth().signInAnonymously().then(user => {
-    userId = user.user.uid;
-});
-
-// PEDIDOS
-let p1=0, p2=0;
-function cambiar(id, val){
-    if(id==="p1") p1 = Math.max(0, p1+val);
-    if(id==="p2") p2 = Math.max(0, p2+val);
-    document.getElementById("p1").innerText = p1;
-    document.getElementById("p2").innerText = p2;
-    document.getElementById("total").innerText = ((p1*0.5)+p2).toFixed(2);
+// LÓGICA DE PRECIOS ACTUALIZADA
+let cantidad = 0;
+function updateCant(v) {
+    cantidad = Math.max(0, cantidad + v);
+    document.getElementById("cantDisplay").innerText = cantidad;
+    
+    // 2 por 1 sol, unidades sueltas a 0.60
+    let pares = Math.floor(cantidad / 2);
+    let sueltas = cantidad % 2;
+    let total = (pares * 1.00) + (sueltas * 0.60);
+    
+    document.getElementById("totalVal").innerText = total.toFixed(2);
 }
 
-function enviar(){
-    let n = document.getElementById("nombre").value;
-    if(!n || (p1==0 && p2==0)) return alert("Completa el pedido");
-    window.open(`https://wa.me/51999999999?text=${encodeURIComponent("*PEDIDO HÉCTOR BITES*\nNombre: "+n+"\n1 Galleta: "+p1+"\nPack Duo: "+p2)}`);
+function hacerPedido() {
+    const nom = document.getElementById("pedNombre").value;
+    const gra = document.getElementById("pedGrado").value;
+    const sec = document.getElementById("pedSeccion").value;
+    const tot = document.getElementById("totalVal").innerText;
+    
+    if(!nom || cantidad === 0) return alert("Ingresa tu nombre y cantidad");
+
+    const msg = `*PEDIDO HÉCTOR BITES*\n👤 *Alumno:* ${nom}\n📍 *Aula:* ${gra} "${sec}"\n🍪 *Cantidad:* ${cantidad} galletas\n💰 *Total:* S/ ${tot}\n\n_Entrega en el Recreo - Turno Tarde_`;
+    window.open(`https://wa.me/51999999999?text=${encodeURIComponent(msg)}`);
 }
 
-// ESTRELLAS
-let currentRating = 0;
-function setRating(n) {
-    currentRating = n;
-    document.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('active', i < n));
+// LÓGICA DE RESEÑAS
+let currentRate = 0;
+function setRate(n) {
+    currentRate = n;
+    const stars = document.getElementById("starSelector").children;
+    for(let i=0; i<5; i++) stars[i].className = i < n ? "star-on" : "star-off";
 }
 
-// PUBLICAR / EDITAR
-function publicar(){
-    const nombre = document.getElementById("nombreReview").value;
-    const grado = document.getElementById("grado").value;
-    const seccion = document.getElementById("seccion").value;
-    const comentario = document.getElementById("comentario").value;
+let editingId = null;
+function publicar() {
+    const nom = document.getElementById("revNombre").value;
+    const com = document.getElementById("revComento").value;
+    if(!nom || !com || currentRate === 0) return alert("Completa tu reseña");
 
-    if(!nombre || !comentario || currentRating == 0) return alert("Llena todo");
+    const data = { nombre: nom, comentario: com, estrellas: currentRate, fecha: Date.now(), author: myUid };
 
-    const data = { nombre, grado, seccion, comentario, estrellas: currentRating, fecha: Date.now(), author: userId };
-
-    if(editId) {
-        db.collection("opiniones").doc(editId).update(data).then(() => {
-            editId = null;
-            document.getElementById("btnPublicar").innerText = "Publicar Reseña";
+    if(editingId) {
+        db.collection("opiniones").doc(editingId).update(data).then(() => {
+            editingId = null;
+            document.getElementById("btnPub").innerText = "Publicar Opinión";
         });
     } else {
         db.collection("opiniones").add(data);
     }
 
-    document.getElementById("comentario").value = "";
-    setRating(0);
+    document.getElementById("revComento").value = "";
+    setRate(0);
 }
 
-// ELIMINAR
-function eliminar(id) {
-    if(confirm("¿Eliminar este comentario?")) db.collection("opiniones").doc(id).delete();
-}
-
-// PREPARAR EDICIÓN
-function prepararEdicion(id, nombre, comentario, estrellas, grado, seccion) {
-    editId = id;
-    document.getElementById("nombreReview").value = nombre;
-    document.getElementById("comentario").value = comentario;
-    document.getElementById("grado").value = grado;
-    document.getElementById("seccion").value = seccion;
-    setRating(estrellas);
-    document.getElementById("btnPublicar").innerText = "Actualizar Reseña ✏️";
-    window.scrollTo({ top: 500, behavior: 'smooth' });
-}
-
-// ESCUCHAR FIREBASE
+// CARGAR Y MOSTRAR OPINIONES
 db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
     let html = "";
-    let tE = 0, tO = 0;
-
     snap.forEach(doc => {
-        let op = doc.data();
-        tE += op.estrellas; tO++;
-
-        // Solo mostrar botones si el usuario es el autor
-        let buttons = (op.author === userId) ? `
-            <div class="review-actions">
-                <button class="btn-icon" onclick="prepararEdicion('${doc.id}', '${op.nombre}', '${op.comentario}', ${op.estrellas}, '${op.grado}', '${op.seccion}')">✏️</button>
-                <button class="btn-icon" style="color:var(--rojo)" onclick="eliminar('${doc.id}')">🗑️</button>
-            </div>` : "";
-
+        const op = doc.data();
+        const isAdmin = op.author === myUid;
+        
         html += `
         <div class="review-card">
-            <div class="review-header">
-                <div class="review-user">
-                    <b>${op.nombre}</b>
-                    <small>${op.grado} "${op.seccion}"</small>
-                </div>
-                ${buttons}
+            <div style="display:flex; justify-content:space-between">
+                <b style="color:var(--verde)">${op.nombre}</b>
+                <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span>
             </div>
-            <div class="review-stars">${"★".repeat(op.estrellas)}${"☆".repeat(5-op.estrellas)}</div>
-            <div style="font-size:14px;">${op.comentario}</div>
+            <p style="font-size:13px; margin:5px 0; color:#444">${op.comentario}</p>
+            ${isAdmin ? `
+                <div style="font-size:11px; text-align:right">
+                    <span onclick="preparaEdit('${doc.id}','${op.nombre}','${op.comentario}',${op.estrellas})" style="color:blue; cursor:pointer">✏️ Editar</span> | 
+                    <span onclick="eliminar('${doc.id}')" style="color:red; cursor:pointer">🗑️ Borrar</span>
+                </div>
+            ` : ""}
         </div>`;
     });
-
-    document.getElementById("opiniones").innerHTML = html;
-    document.getElementById("promedio").innerText = `Promedio comunidad ⭐ ${tO ? (tE/tO).toFixed(1) : 0}`;
+    document.getElementById("listaOpiniones").innerHTML = html;
 });
+
+function preparaEdit(id, n, c, e) {
+    editingId = id;
+    document.getElementById("revNombre").value = n;
+    document.getElementById("revComento").value = c;
+    setRate(e);
+    document.getElementById("btnPub").innerText = "Actualizar Reseña ✏️";
+}
+
+function eliminar(id) {
+    if(confirm("¿Seguro que quieres borrar tu opinión?")) db.collection("opiniones").doc(id).delete();
+}
 </script>
 </body>
 </html>
