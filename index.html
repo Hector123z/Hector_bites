@@ -12,100 +12,102 @@
     --claro: #f1f8e9;
     --wsp: #25D366;
     --dorado: #FFD700;
-    --gris-fondo: #f4f4f4;
+    --gris-fondo: #f8f9fa;
     --rojo: #e53935;
+    --blanco: #ffffff;
 }
 
 body {
     background: var(--claro);
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Roboto, sans-serif;
     margin: 0;
-    padding-top: 60px; /* Espacio para la barra superior */
+    padding-top: 60px;
+    color: #333;
 }
 
-/* --- MENÚ Y NAVEGACIÓN --- */
+/* --- NAVBAR Y MENÚ --- */
 .navbar {
     background: var(--verde);
     color: white;
-    padding: 10px 15px;
+    padding: 0 20px;
     position: fixed;
     top: 0;
     width: 100%;
     display: flex;
     align-items: center;
     z-index: 1000;
-    height: 55px;
+    height: 60px;
     box-sizing: border-box;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-.menu-btn { font-size: 28px; cursor: pointer; }
-.nav-title { margin-left: 20px; font-weight: bold; font-size: 18px; }
+.menu-btn { font-size: 30px; cursor: pointer; display: flex; align-items: center; }
+.nav-title { margin-left: 15px; font-weight: 800; font-size: 20px; letter-spacing: 1px; }
 
 .sidebar {
     position: fixed;
-    left: -280px;
+    left: -285px;
     top: 0;
-    width: 260px;
+    width: 270px;
     height: 100%;
-    background: white;
-    transition: 0.3s;
+    background: var(--blanco);
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 2000;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.3);
-    padding-top: 20px;
+    box-shadow: 10px 0 20px rgba(0,0,0,0.2);
+    padding-top: 10px;
 }
 .sidebar.active { left: 0; }
-.sidebar-header { padding: 20px; border-bottom: 2px solid var(--verde); color: var(--verde); font-weight: bold; }
-.sidebar a { display: block; padding: 15px 25px; color: #333; text-decoration: none; font-weight: bold; border-bottom: 1px solid #f0f0f0; }
+.sidebar-header { padding: 30px 20px; border-bottom: 2px solid var(--claro); color: var(--verde); font-weight: 800; font-size: 22px; text-align: center; }
+.sidebar a { display: flex; align-items: center; padding: 18px 25px; color: #444; text-decoration: none; font-weight: 600; border-bottom: 1px solid #f5f5f5; transition: 0.2s; }
+.sidebar a:active { background: var(--claro); color: var(--verde); }
 
-.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1500; backdrop-filter: blur(3px); }
 
 /* --- CONTENEDORES --- */
-.container { padding: 15px; max-width: 420px; margin: auto; }
+.container { padding: 15px; max-width: 440px; margin: auto; }
 .section { display: none; }
-.section.active { display: block; animation: fadeIn 0.3s; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.section.active { display: block; animation: slideUp 0.4s ease-out; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-.card { background: #fff; border-radius: 25px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #eee; }
+.card { background: var(--blanco); border-radius: 28px; padding: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.03); }
 
-/* --- ESTILOS DE PRODUCTOS --- */
+/* --- TIENDA Y PRODUCTOS --- */
 .producto-card {
     background: var(--gris-fondo);
-    padding: 12px;
-    border-radius: 18px;
-    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 20px;
+    margin-bottom: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.controles { display: flex; align-items: center; gap: 10px; background: #fff; padding: 5px 10px; border-radius: 50px; }
-.btn-cant { width: 28px; height: 28px; border: none; border-radius: 50%; background: var(--verde); color: white; cursor: pointer; font-weight: bold; }
+.controles { display: flex; align-items: center; gap: 12px; background: var(--blanco); padding: 6px 12px; border-radius: 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.btn-cant { width: 32px; height: 32px; border: none; border-radius: 50%; background: var(--verde); color: white; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
 
-input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 15px; box-sizing: border-box; }
+input, select, textarea { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #e0e0e0; border-radius: 15px; font-size: 15px; outline: none; background: #fff; }
+input:focus { border-color: var(--verde); }
 
 .total-banner {
     background: var(--verde-fuerte);
     color: #fff;
-    padding: 15px;
-    border-radius: 15px;
+    padding: 18px;
+    border-radius: 20px;
     display: flex;
     justify-content: space-between;
-    font-weight: bold;
-    font-size: 18px;
-    margin: 10px 0;
+    font-weight: 700;
+    font-size: 20px;
+    margin: 15px 0;
 }
 
-.btn-wsp { background: var(--wsp); color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: bold; font-size: 16px; cursor: pointer; }
+.btn-wsp { background: var(--wsp); color: white; border: none; width: 100%; padding: 18px; border-radius: 18px; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
 
 /* --- RASPADO --- */
-#juego-wrap { display: none; margin-top: 15px; position: relative; width: 100%; max-width: 300px; height: 150px; margin: 15px auto; }
-canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 15px; touch-action: none; width: 100%; height: 100%; }
-#premio-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: bold; background: #fff; border-radius: 15px; z-index: 1; border: 1px dashed #ccc; text-align: center; }
+#juego-wrap { display: none; margin: 20px auto; position: relative; width: 100%; max-width: 300px; height: 150px; }
+canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; touch-action: none; cursor: crosshair; }
+#premio-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 800; background: #fff; border-radius: 20px; z-index: 1; border: 2px dashed #ddd; font-size: 20px; }
 
-/* --- OTROS --- */
-.puntos-tag { background: var(--dorado); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
-.opinion-card { background: var(--gris-fondo); padding: 12px; border-radius: 15px; margin-bottom: 10px; position: relative; }
-.btn-delete { position: absolute; top: 5px; right: 5px; background: none; border: none; color: var(--rojo); cursor: pointer; }
-.stars-input { display: flex; justify-content: center; gap: 5px; font-size: 25px; margin: 10px 0; }
-.star-off { color: #ccc; } .star-on { color: var(--dorado); }
+/* --- PUNTOS Y TAGS --- */
+.puntos-tag { background: var(--dorado); color: #000; padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 14px; box-shadow: 0 3px 8px rgba(255, 215, 0, 0.4); }
+.canje-card { background: var(--gris-fondo); padding: 18px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border: 1px solid #eee; }
 </style>
 </head>
 
@@ -113,23 +115,24 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 15px; t
 
     <div class="navbar">
         <div class="menu-btn" onclick="toggleMenu()">☰</div>
-        <div class="nav-title">HÉCTOR BITES</div>
+        <div class="nav-title">HÉCTOR BITES 🍪</div>
     </div>
 
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
     <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">MENU PRINCIPAL</div>
+        <div class="sidebar-header">MENÚ PRINCIPAL</div>
         <a href="#" onclick="showSection('sec-pedir')">🛍️ Realizar Pedido</a>
-        <a href="#" onclick="showSection('sec-raspa')">🎟️ Raspa y Puntos</a>
+        <a href="#" onclick="showSection('sec-raspa')">🎟️ Raspa y Gana</a>
+        <a href="#" onclick="showSection('sec-tienda')">🛒 Tienda de Canje</a>
         <a href="#" onclick="showSection('sec-comunidad')">⭐ Opiniones</a>
-        <a href="#" onclick="showSection('sec-info')">📋 Ingredientes/Nutrición</a>
+        <a href="#" onclick="showSection('sec-info')">📋 Info Nutricional</a>
     </nav>
 
     <div class="container">
 
         <div id="sec-pedir" class="section active">
             <div class="card">
-                <h3 style="margin-top:0">Haz tu pedido 🍪</h3>
+                <h3 style="margin-top:0; color: var(--verde);">¡Pide tus galletas!</h3>
                 <div class="producto-card">
                     <div><b>1 Galleta</b><br><small>S/ 0.60</small></div>
                     <div class="controles">
@@ -146,38 +149,42 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 15px; t
                         <button class="btn-cant" onclick="cambiar('p', 1)">+</button>
                     </div>
                 </div>
-                <input id="pedNombre" placeholder="Tu nombre">
+                
+                <input id="pedNombre" placeholder="Nombre completo">
+                
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <select id="pedGrado">
-                        <option value="5to Prim.">5to Primaria</option>
-                        <option value="1ro Sec.">1ro Sec.</option>
-                        <option value="2do Sec.">2do Sec.</option>
-                        <option value="3ro Sec.">3ro Sec.</option>
-                        <option value="4to Sec.">4to Sec.</option>
-                        <option value="5to Sec.">5to Sec.</option>
+                        <option value="3ro Sec.">3ro Secundaria</option>
+                        <option value="4to Sec.">4to Secundaria</option>
+                        <option value="5to Sec.">5to Secundaria</option>
                     </select>
                     <select id="pedSeccion">
-                        <option value="A">Secc. A</option><option value="B">Secc. B</option><option value="C">Secc. C</option>
+                        <option value="A">Secc. A</option><option value="B">Secc. B</option>
+                        <option value="C">Secc. C</option><option value="D">Secc. D</option>
+                        <option value="E">Secc. E</option><option value="F">Secc. F</option>
+                        <option value="G">Secc. G</option><option value="H">Secc. H</option>
                     </select>
                 </div>
+                
                 <div class="total-banner">
                     <span>Total:</span>
                     <span>S/ <span id="totalVal">0.00</span></span>
                 </div>
-                <button class="btn-wsp" onclick="enviarPedido()">🚀 PEDIR POR WHATSAPP</button>
-                <p style="font-size:10px; color:red; text-align:center; margin-top:10px;">🛵 ENTREGA EN RECREO - TURNO TARDE</p>
+                
+                <button class="btn-wsp" onclick="enviarPedido()">🚀 ENVIAR A WHATSAPP</button>
+                <p style="font-size:11px; color:#d32f2f; text-align:center; font-weight:bold; margin-top:15px;">🛵 ENTREGAS EN EL RECREO - TURNO TARDE</p>
             </div>
         </div>
 
         <div id="sec-raspa" class="section">
             <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3>Raspa y Puntos</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                    <h3 style="margin:0; color:var(--verde)">Juega y Gana</h3>
                     <div class="puntos-tag" id="userPuntos">0 pts</div>
                 </div>
-                <p style="font-size:12px;">Ingresa el código de tu envoltura:</p>
-                <input type="text" id="codInput" placeholder="HB-XXXX">
-                <button class="btn-wsp" style="background:var(--verde)" onclick="verificarCod()">VERIFICAR</button>
+                <p style="font-size:13px;">Ingresa el código que viene en tu empaque:</p>
+                <input type="text" id="codInput" placeholder="EJ: HB-999" style="text-align: center; font-weight: bold; font-size: 18px;">
+                <button class="btn-wsp" style="background:var(--verde); box-shadow:none;" onclick="verificarCod()">VERIFICAR CÓDIGO</button>
 
                 <div id="juego-wrap">
                     <div id="premio-bg"></div>
@@ -187,28 +194,49 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 15px; t
             </div>
         </div>
 
+        <div id="sec-tienda" class="section">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="margin:0; color:var(--verde)">Tienda de Canje 🛒</h3>
+                    <div class="puntos-tag" id="ptsTiendaDisplay">0 pts</div>
+                </div>
+                <p style="font-size: 13px; color: #666;">Si pierdes en el Raspa, ¡aquí cambias tus puntos!</p>
+                
+                <div class="canje-card">
+                    <div>
+                        <b style="font-size:16px;">1 Galleta Gratis</b><br>
+                        <small style="color:var(--verde); font-weight:bold;">Costo: 100 puntos</small>
+                    </div>
+                    <button onclick="canjearPuntos(100, 'Galleta Gratis')" style="background: var(--dorado); color: black; border: none; padding: 10px 15px; border-radius: 12px; font-weight: 800; cursor: pointer;">CANJEAR</button>
+                </div>
+                <p style="font-size:10px; text-align:center; margin-top:20px; color:#999;">Los puntos se acumulan solo en este celular.</p>
+            </div>
+        </div>
+
         <div id="sec-comunidad" class="section">
             <div class="card">
-                <h3>Comunidad ⭐</h3>
+                <h3 style="color:var(--verde)">Opiniones ⭐</h3>
                 <input id="revNombre" placeholder="Tu nombre">
                 <div class="stars-input" id="starSelector">
                     <span class="star-off" onclick="setRate(1)">★</span><span class="star-off" onclick="setRate(2)">★</span><span class="star-off" onclick="setRate(3)">★</span><span class="star-off" onclick="setRate(4)">★</span><span class="star-off" onclick="setRate(5)">★</span>
                 </div>
-                <textarea id="revComento" rows="2" placeholder="¿Qué tal las galletas?"></textarea>
-                <button onclick="publicar()" style="background:var(--verde); color:white; border:none; width:100%; padding:12px; border-radius:12px; font-weight:bold;">Publicar Opinión</button>
+                <textarea id="revComento" rows="2" placeholder="Escribe tu reseña aquí..."></textarea>
+                <button class="btn-wsp" style="background:var(--verde); padding:12px;" onclick="publicar()">PUBLICAR</button>
                 <div id="listaOpiniones" style="margin-top:20px;"></div>
             </div>
         </div>
 
         <div id="sec-info" class="section">
             <div class="card">
-                <h4>🥣 Ingredientes</h4>
-                <p style="font-size:13px; color:#555;">Avena, harina fortificada, azúcar rubia, huevo, leche y vainilla.</p>
-                <hr>
-                <h4>📊 Nutrición (25g)</h4>
-                <div style="font-size:12px; display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                    <div>Energía: 110 kcal</div><div>Grasas: 4.2g</div>
-                    <div>Proteína: 2.1g</div><div>Carbos: 16.5g</div>
+                <h4 style="color:var(--verde); margin-top:0;">📋 Información</h4>
+                <p style="font-size:14px; line-height:1.5;"><b>Ingredientes:</b> Avena selecta, harina fortificada, azúcar rubia natural, huevo fresco, leche y esencia de vainilla premium.</p>
+                <hr style="border:0; border-top:1px solid #eee;">
+                <h4 style="color:var(--verde);">📊 Tabla Nutricional (25g)</h4>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:13px;">
+                    <div style="background:var(--gris-fondo); padding:8px; border-radius:10px;">Energía: 110 kcal</div>
+                    <div style="background:var(--gris-fondo); padding:8px; border-radius:10px;">Grasas: 4.2g</div>
+                    <div style="background:var(--gris-fondo); padding:8px; border-radius:10px;">Proteína: 2.1g</div>
+                    <div style="background:var(--gris-fondo); padding:8px; border-radius:10px;">Carbos: 16.5g</div>
                 </div>
             </div>
         </div>
@@ -220,7 +248,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 15px; t
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
-// --- CONFIGURACIÓN FIREBASE ---
+// --- FIREBASE ---
 const firebaseConfig = {
     apiKey: "AIzaSyAJb-fRgRJlMS1AZDmRs1iRZivbVb2xIaY",
     authDomain: "hector-bites.firebaseapp.com",
@@ -238,18 +266,26 @@ firebase.auth().signInAnonymously().then(u => { myUid = u.user.uid; });
 
 // --- NAVEGACIÓN ---
 function toggleMenu() {
-    document.getElementById('sidebar').classList.toggle('active');
-    document.getElementById('overlay').style.display = document.getElementById('overlay').style.display === 'block' ? 'none' : 'block';
+    const side = document.getElementById('sidebar');
+    const over = document.getElementById('overlay');
+    side.classList.toggle('active');
+    over.style.display = side.classList.contains('active') ? 'block' : 'none';
 }
 
 function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    if(id === 'sec-raspa') document.getElementById('userPuntos').innerText = misPuntos + " pts";
+    updatePuntosUI();
     toggleMenu();
+    window.scrollTo(0,0);
 }
 
-// --- LÓGICA PEDIDOS ---
+function updatePuntosUI() {
+    if(document.getElementById('userPuntos')) document.getElementById('userPuntos').innerText = misPuntos + " pts";
+    if(document.getElementById('ptsTiendaDisplay')) document.getElementById('ptsTiendaDisplay').innerText = misPuntos + " pts";
+}
+
+// --- PEDIDOS ---
 let unid = 0, pack = 0;
 function cambiar(t, v) {
     if(t==='u') unid = Math.max(0, unid+v); else pack = Math.max(0, pack+v);
@@ -263,50 +299,61 @@ function enviarPedido() {
     const g = document.getElementById("pedGrado").value;
     const s = document.getElementById("pedSeccion").value;
     const t = document.getElementById("totalVal").innerText;
-    if(!n || t == "0.00") return alert("Completa tus datos");
-    const msg = `*NUEVO PEDIDO*\n👤 ${n}\n📍 Aula: ${g} ${s}\n🍪 Galletas: ${unid}\n🎁 Pack Duo: ${pack}\n💰 Total: S/ ${t}`;
+    if(!n || t == "0.00") return alert("Por favor ingresa tu nombre y elige galletas");
+    const msg = `*PEDIDO HÉCTOR BITES*\n👤 Alumno: ${n}\n📍 Aula: ${g} ${s}\n🍪 Galletas: ${unid}\n🎁 Pack Duo: ${pack}\n💰 TOTAL: S/ ${t}`;
     window.open(`https://wa.me/51975754119?text=${encodeURIComponent(msg)}`);
 }
 
-// --- LÓGICA RASPADO Y PUNTOS ---
+// --- RASPADO ---
 function verificarCod() {
     const cod = document.getElementById('codInput').value.trim().toUpperCase();
-    if(cod.length < 4) return alert("Código inválido");
+    if(cod.length < 4) return alert("Código demasiado corto");
 
     let hash = 0;
     for (let i = 0; i < cod.length; i++) hash = cod.charCodeAt(i) + ((hash << 5) - hash);
-    const gano = (Math.abs(hash) % 100) < 3;
+    const gano = (Math.abs(hash) % 100) < 5;
 
     document.getElementById('juego-wrap').style.display = 'block';
-    const txt = document.getElementById('premio-bg');
+    const bg = document.getElementById('premio-bg');
 
     if(gano) {
-        txt.innerHTML = "<span style='color:green'>🎉 ¡GANASTE UNA GALLETA!</span>";
+        bg.innerHTML = "<span style='color:green'>🏆 ¡GANASTE!</span>";
         document.getElementById('btnCanjeExtra').innerHTML = `<button class="btn-wsp" onclick="window.open('https://wa.me/51975754119?text=Gané con el código ${cod}')">RECLAMAR PREMIO</button>`;
     } else {
         misPuntos += 10;
         localStorage.setItem('hb_puntos', misPuntos);
-        document.getElementById('userPuntos').innerText = misPuntos + " pts";
-        txt.innerHTML = "<span style='color:gray'>😢 SIGUE INTENTANDO<br>+10 PUNTOS</span>";
-        document.getElementById('btnCanjeExtra').innerHTML = misPuntos >= 100 ? `<button class="btn-wsp" style="background:orange" onclick="alert('Canjeaste 100 puntos por galleta!')">CANJEAR 100 PTS</button>` : "";
+        updatePuntosUI();
+        bg.innerHTML = "<span style='color:#666'>+10 PUNTOS</span>";
+        document.getElementById('btnCanjeExtra').innerHTML = `<p style='text-align:center; color:green; font-weight:bold;'>¡Puntos sumados! Úsalos en la tienda.</p>`;
     }
     initCanvas();
 }
 
 function initCanvas() {
     const c = document.getElementById("canvas"), ctx = c.getContext("2d");
-    ctx.globalCompositeOperation="source-over"; ctx.fillStyle="#bbb"; ctx.fillRect(0,0,300,150);
-    ctx.fillStyle="white"; ctx.font="bold 16px Arial"; ctx.textAlign="center"; ctx.fillText("RASPA AQUÍ", 150, 85);
+    ctx.globalCompositeOperation="source-over"; ctx.fillStyle="#c0c0c0"; ctx.fillRect(0,0,300,150);
+    ctx.fillStyle="#555"; ctx.font="bold 18px Arial"; ctx.textAlign="center"; ctx.fillText("RASPA AQUÍ PARA VER", 150, 85);
     const ras = (e) => {
         const r = c.getBoundingClientRect();
         const x = (e.clientX || e.touches[0].clientX) - r.left, y = (e.clientY || e.touches[0].clientY) - r.top;
-        ctx.globalCompositeOperation="destination-out"; ctx.beginPath(); ctx.arc(x,y,20,0,Math.PI*2); ctx.fill();
+        ctx.globalCompositeOperation="destination-out"; ctx.beginPath(); ctx.arc(x,y,25,0,Math.PI*2); ctx.fill();
     };
     c.ontouchmove = (e) => { e.preventDefault(); ras(e); };
     c.onmousemove = (e) => { if(e.buttons==1) ras(e); };
 }
 
-// --- RESEÑAS (TUS FUNCIONES DE FIREBASE) ---
+// --- CANJE ---
+function canjearPuntos(costo, item) {
+    if (misPuntos < costo) return alert("Aún no tienes suficientes puntos.");
+    if(confirm(`¿Deseas canjear ${costo} puntos por ${item}?`)) {
+        misPuntos -= costo;
+        localStorage.setItem('hb_puntos', misPuntos);
+        updatePuntosUI();
+        window.open(`https://wa.me/51975754119?text=Hola Héctor, canjeé mis puntos por una ${item}`);
+    }
+}
+
+// --- RESEÑAS ---
 let currentRate = 0;
 function setRate(n) {
     currentRate = n;
@@ -316,7 +363,7 @@ function setRate(n) {
 
 function publicar() {
     const nom = document.getElementById("revNombre").value, com = document.getElementById("revComento").value;
-    if(!nom || !com || currentRate === 0) return alert("Completa la reseña");
+    if(!nom || !com || currentRate === 0) return alert("Llena todos los campos");
     db.collection("opiniones").add({ nombre: nom, comentario: com, estrellas: currentRate, fecha: Date.now(), author: myUid });
     document.getElementById("revComento").value = ""; setRate(0);
 }
@@ -327,11 +374,14 @@ db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
         const op = doc.data();
         h += `<div class="opinion-card">
             <b style="color:var(--verde)">${op.nombre}</b> <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span>
-            <p style="font-size:12px; margin:5px 0;">${op.comentario}</p>
+            <p style="font-size:13px; margin:5px 0; color:#555;">${op.comentario}</p>
         </div>`;
     });
     document.getElementById("listaOpiniones").innerHTML = h;
 });
+
+// Al cargar
+updatePuntosUI();
 </script>
 </body>
 </html>
