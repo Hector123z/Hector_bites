@@ -183,7 +183,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
                     <div class="puntos-tag" id="userPuntos">0 pts</div>
                 </div>
                 <p style="font-size:13px;">Ingresa el código que viene en tu empaque:</p>
-                <input type="text" id="codInput" placeholder="EJ: HB-999" style="text-align: center; font-weight: bold; font-size: 18px;">
+                <input type="text" id="codInput" placeholder="EJ: HB-XXXX" style="text-align: center; font-weight: bold; font-size: 18px;">
                 <button class="btn-wsp" style="background:var(--verde); box-shadow:none;" onclick="verificarCod()">VERIFICAR CÓDIGO</button>
 
                 <div id="juego-wrap">
@@ -261,8 +261,13 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let myUid = "";
 let misPuntos = parseInt(localStorage.getItem('hb_puntos')) || 0;
+// Cargar códigos ya usados en este celular
+let usados = JSON.parse(localStorage.getItem('hb_cods_usados')) || [];
 
 firebase.auth().signInAnonymously().then(u => { myUid = u.user.uid; });
+
+// --- LISTA OFICIAL DE CÓDIGOS ---
+const CODS_VALIDOS = ["HB-B3N","HB-U9J","HB-Q5U","HB-F8V","HB-F6D","HB-B9Z","HB-N2K","HB-D9E","HB-M4S","HB-H4X","HB-P4E","HB-F3V","HB-K2H","HB-D9P","HB-J4N","HB-U7A","HB-W3V","HB-U7P","HB-B8F","HB-Y8L","HB-Y7G","HB-E3H","HB-H7F","HB-F9U","HB-T2G","HB-M5B","HB-Q2Q","HB-T5R","HB-Q5K","HB-U9S","HB-D8B","HB-K3Z","HB-U6S","HB-T8N","HB-V6T","HB-Y9J","HB-G9K","HB-V9G","HB-W2R","HB-E8Z","HB-W7S","HB-V5K","HB-N9S","HB-X9M","HB-L6Z","HB-H9G","HB-R5K","HB-K2G","HB-M7P","HB-F5A","HB-N8S","HB-W2V","HB-P9A","HB-H4M","HB-S5K","HB-K5C","HB-F9H","HB-F5P","HB-M4M","HB-M9D","HB-D4X","HB-M2M","HB-M3R","HB-B7V","HB-V8T","HB-V5A","HB-P7D","HB-X2P","HB-C8H","HB-N8X","HB-Z6H","HB-X3P","HB-N2R","HB-N9Q","HB-P7Y","HB-G9U","HB-M2C","HB-A9T","HB-R8E","HB-N2F","HB-K9A","HB-A3A","HB-J3C","HB-E7E","HB-D2M","HB-D5G","HB-T8E","HB-L6H","HB-M3Y","HB-R3A","HB-H4S","HB-B5V","HB-V5W","HB-Y7B","HB-P8B","HB-H6C","HB-H3Q","HB-W5E","HB-Q6E","HB-E6H"];
 
 // --- NAVEGACIÓN ---
 function toggleMenu() {
@@ -276,7 +281,7 @@ function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     updatePuntosUI();
-    toggleMenu();
+    if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
     window.scrollTo(0,0);
 }
 
@@ -307,26 +312,46 @@ function enviarPedido() {
 // --- RASPADO ---
 function verificarCod() {
     const cod = document.getElementById('codInput').value.trim().toUpperCase();
-    if(cod.length < 4) return alert("Código demasiado corto");
+    const bg = document.getElementById('premio-bg');
+    const wrap = document.getElementById('juego-wrap');
+    const btnEx = document.getElementById('btnCanjeExtra');
 
+    // Limpiar vista previa
+    wrap.style.display = 'none';
+    btnEx.innerHTML = "";
+
+    // VALIDACIÓN
+    if (!CODS_VALIDOS.includes(cod)) {
+        return alert("❌ Código incorrecto o no existe.");
+    }
+
+    if (usados.includes(cod)) {
+        return alert("⚠️ Este código ya fue usado en este celular.");
+    }
+
+    // Si pasa, marcar como usado
+    usados.push(cod);
+    localStorage.setItem('hb_cods_usados', JSON.stringify(usados));
+
+    // Lógica de premio (probabilidad según el hash del código)
     let hash = 0;
     for (let i = 0; i < cod.length; i++) hash = cod.charCodeAt(i) + ((hash << 5) - hash);
-    const gano = (Math.abs(hash) % 100) < 5;
+    const gano = (Math.abs(hash) % 100) < 10; // 10% probabilidad de ganar galleta
 
-    document.getElementById('juego-wrap').style.display = 'block';
-    const bg = document.getElementById('premio-bg');
+    wrap.style.display = 'block';
 
     if(gano) {
         bg.innerHTML = "<span style='color:green'>🏆 ¡GANASTE!</span>";
-        document.getElementById('btnCanjeExtra').innerHTML = `<button class="btn-wsp" onclick="window.open('https://wa.me/51975754119?text=Gané con el código ${cod}')">RECLAMAR PREMIO</button>`;
+        btnEx.innerHTML = `<button class="btn-wsp" onclick="window.open('https://wa.me/51975754119?text=Gané con el código ${cod}')">RECLAMAR GALLETA</button>`;
     } else {
         misPuntos += 10;
         localStorage.setItem('hb_puntos', misPuntos);
         updatePuntosUI();
         bg.innerHTML = "<span style='color:#666'>+10 PUNTOS</span>";
-        document.getElementById('btnCanjeExtra').innerHTML = `<p style='text-align:center; color:green; font-weight:bold;'>¡Puntos sumados! Úsalos en la tienda.</p>`;
+        btnEx.innerHTML = `<p style='text-align:center; color:green; font-weight:bold;'>¡Código válido! Se sumaron 10 puntos.</p>`;
     }
     initCanvas();
+    document.getElementById('codInput').value = "";
 }
 
 function initCanvas() {
@@ -335,7 +360,8 @@ function initCanvas() {
     ctx.fillStyle="#555"; ctx.font="bold 18px Arial"; ctx.textAlign="center"; ctx.fillText("RASPA AQUÍ PARA VER", 150, 85);
     const ras = (e) => {
         const r = c.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - r.left, y = (e.clientY || e.touches[0].clientY) - r.top;
+        const x = (e.clientX || (e.touches ? e.touches[0].clientX : 0)) - r.left, 
+              y = (e.clientY || (e.touches ? e.touches[0].clientY : 0)) - r.top;
         ctx.globalCompositeOperation="destination-out"; ctx.beginPath(); ctx.arc(x,y,25,0,Math.PI*2); ctx.fill();
     };
     c.ontouchmove = (e) => { e.preventDefault(); ras(e); };
@@ -372,7 +398,7 @@ db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
     let h = "";
     snap.forEach(doc => {
         const op = doc.data();
-        h += `<div class="opinion-card">
+        h += `<div class="opinion-card" style="background:#fff; padding:15px; border-radius:15px; margin-bottom:10px; border:1px solid #eee">
             <b style="color:var(--verde)">${op.nombre}</b> <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span>
             <p style="font-size:13px; margin:5px 0; color:#555;">${op.comentario}</p>
         </div>`;
@@ -380,9 +406,8 @@ db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
     document.getElementById("listaOpiniones").innerHTML = h;
 });
 
-// --- FUNCIÓN DEL QR ---
+// --- FUNCIÓN DEL QR E INICIO ---
 window.onload = function() {
-    // Si entran por el link con #raspa, abre esa sección automáticamente
     if (window.location.hash === "#raspa") {
         showSection('sec-raspa');
     }
