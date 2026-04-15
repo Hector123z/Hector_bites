@@ -380,8 +380,14 @@ db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
     document.getElementById("listaOpiniones").innerHTML = h;
 });
 
-// Al cargar
-updatePuntosUI();
+// --- FUNCIÓN DEL QR ---
+window.onload = function() {
+    // Si entran por el link con #raspa, abre esa sección automáticamente
+    if (window.location.hash === "#raspa") {
+        showSection('sec-raspa');
+    }
+    updatePuntosUI();
+};
 </script>
 </body>
 </html>
