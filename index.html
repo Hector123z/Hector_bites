@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Héctor Bites | Oficial</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Héctor Bites | App Oficial</title>
 
 <style>
 :root {
@@ -19,41 +19,67 @@
 body {
     background: var(--claro);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    display: flex;
-    justify-content: center;
     margin: 0;
-    padding: 15px;
+    padding-top: 60px; /* Espacio para la barra superior */
 }
 
-.container {
-    background: #fff;
-    max-width: 420px;
+/* --- MENÚ Y NAVEGACIÓN --- */
+.navbar {
+    background: var(--verde);
+    color: white;
+    padding: 10px 15px;
+    position: fixed;
+    top: 0;
     width: 100%;
-    padding: 20px;
-    border-radius: 30px;
-    box-shadow: 0 15px 35px rgba(0,0,0,.1);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    height: 55px;
+    box-sizing: border-box;
 }
+.menu-btn { font-size: 28px; cursor: pointer; }
+.nav-title { margin-left: 20px; font-weight: bold; font-size: 18px; }
 
-.header-ie { text-align: center; margin-bottom: 20px; }
-.header-ie h2 { margin: 0; color: var(--verde); font-size: 26px; }
-.header-ie p { margin: 2px 0; font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; }
+.sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    width: 260px;
+    height: 100%;
+    background: white;
+    transition: 0.3s;
+    z-index: 2000;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    padding-top: 20px;
+}
+.sidebar.active { left: 0; }
+.sidebar-header { padding: 20px; border-bottom: 2px solid var(--verde); color: var(--verde); font-weight: bold; }
+.sidebar a { display: block; padding: 15px 25px; color: #333; text-decoration: none; font-weight: bold; border-bottom: 1px solid #f0f0f0; }
 
+.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+
+/* --- CONTENEDORES --- */
+.container { padding: 15px; max-width: 420px; margin: auto; }
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.card { background: #fff; border-radius: 25px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #eee; }
+
+/* --- ESTILOS DE PRODUCTOS --- */
 .producto-card {
     background: var(--gris-fondo);
-    padding: 15px;
-    border-radius: 20px;
+    padding: 12px;
+    border-radius: 18px;
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+.controles { display: flex; align-items: center; gap: 10px; background: #fff; padding: 5px 10px; border-radius: 50px; }
+.btn-cant { width: 28px; height: 28px; border: none; border-radius: 50%; background: var(--verde); color: white; cursor: pointer; font-weight: bold; }
 
-.controles { display: flex; align-items: center; gap: 12px; background: #fff; padding: 5px 10px; border-radius: 50px; }
-.btn-cant { width: 30px; height: 30px; border: none; border-radius: 50%; background: var(--verde); color: white; cursor: pointer; font-weight: bold; }
-
-input, select, textarea {
-    width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 15px; box-sizing: border-box;
-}
+input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 15px; box-sizing: border-box; }
 
 .total-banner {
     background: var(--verde-fuerte);
@@ -62,229 +88,139 @@ input, select, textarea {
     border-radius: 15px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     font-weight: bold;
     font-size: 18px;
-    margin: 15px 0 10px;
+    margin: 10px 0;
 }
 
-.aviso-entrega {
-    font-size: 11px;
-    background: #fff3f3;
-    color: #d32f2f;
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    border: 1px dashed #d32f2f;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
+.btn-wsp { background: var(--wsp); color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: bold; font-size: 16px; cursor: pointer; }
 
-.btn-wsp {
-    background: var(--wsp);
-    color: white;
-    border: none;
-    width: 100%;
-    padding: 16px;
-    border-radius: 15px;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
+/* --- RASPADO --- */
+#juego-wrap { display: none; margin-top: 15px; position: relative; width: 100%; max-width: 300px; height: 150px; margin: 15px auto; }
+canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 15px; touch-action: none; width: 100%; height: 100%; }
+#premio-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: bold; background: #fff; border-radius: 15px; z-index: 1; border: 1px dashed #ccc; text-align: center; }
 
-.opiniones-container {
-    max-height: 300px;
-    overflow-y: auto;
-    border: 1px solid #eee;
-    border-radius: 15px;
-    padding: 10px;
-    background: #fafafa;
-    margin-top: 15px;
-}
-
-.opinion-card {
-    background: white; 
-    padding: 12px; 
-    border-radius: 12px; 
-    margin-bottom: 10px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    position: relative;
-}
-
-.btn-delete {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    color: var(--rojo);
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.seccion-info {
-    margin-top: 25px;
-    padding: 15px;
-    border-top: 2px solid var(--claro);
-}
-.seccion-info h4 { color: var(--verde); margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px; }
-
-.nutri-table {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-.nutri-item {
-    background: var(--gris-fondo);
-    padding: 8px;
-    border-radius: 8px;
-    font-size: 11px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.galeria-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-top: 10px;
-}
-.cuadro-elegante {
-    background: #fff;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    border: 1px solid #eee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1 / 1;
-    padding: 10px;
-}
-.cuadro-elegante img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.cuadro-grande { grid-column: span 2; aspect-ratio: 16 / 9; }
-
-.stars-input { display: flex; justify-content: center; gap: 5px; margin: 10px 0; font-size: 30px; cursor: pointer; }
-.star-off { color: #ccc; }
-.star-on { color: var(--dorado); }
+/* --- OTROS --- */
+.puntos-tag { background: var(--dorado); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+.opinion-card { background: var(--gris-fondo); padding: 12px; border-radius: 15px; margin-bottom: 10px; position: relative; }
+.btn-delete { position: absolute; top: 5px; right: 5px; background: none; border: none; color: var(--rojo); cursor: pointer; }
+.stars-input { display: flex; justify-content: center; gap: 5px; font-size: 25px; margin: 10px 0; }
+.star-off { color: #ccc; } .star-on { color: var(--dorado); }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-    <div class="header-ie">
-        <h2>Héctor Bites 🍪</h2>
-        <p>I.E. Gran Amauta 3037</p>
+    <div class="navbar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <div class="nav-title">HÉCTOR BITES</div>
     </div>
 
-    <div class="producto-card">
-        <div><b>1 Galleta</b><br><small style="color: var(--verde); font-weight: bold;">S/ 0.60</small></div>
-        <div class="controles">
-            <button class="btn-cant" onclick="cambiar('u', -1)">-</button>
-            <b id="cantU">0</b>
-            <button class="btn-cant" onclick="cambiar('u', 1)">+</button>
-        </div>
-    </div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">MENU PRINCIPAL</div>
+        <a href="#" onclick="showSection('sec-pedir')">🛍️ Realizar Pedido</a>
+        <a href="#" onclick="showSection('sec-raspa')">🎟️ Raspa y Puntos</a>
+        <a href="#" onclick="showSection('sec-comunidad')">⭐ Opiniones</a>
+        <a href="#" onclick="showSection('sec-info')">📋 Ingredientes/Nutrición</a>
+    </nav>
 
-    <div class="producto-card">
-        <div><b>Pack Duo</b><br><small style="color: var(--verde); font-weight: bold;">S/ 1.00</small></div>
-        <div class="controles">
-            <button class="btn-cant" onclick="cambiar('p', -1)">-</button>
-            <b id="cantP">0</b>
-            <button class="btn-cant" onclick="cambiar('p', 1)">+</button>
-        </div>
-    </div>
+    <div class="container">
 
-    <input id="pedNombre" placeholder="Tu nombre para el pedido">
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <select id="pedGrado">
-            <option value="3ro Sec.">3ro Secundaria</option>
-            <option value="4to Sec.">4to Secundaria</option>
-            <option value="5to Sec.">5to Secundaria</option>
-        </select>
-        <select id="pedSeccion">
-            <option value="A">Secc. A</option>
-            <option value="B">Secc. B</option>
-            <option value="C">Secc. C</option>
-            <option value="D">Secc. D</option>
-            <option value="E">Secc. E</option>
-            <option value="F">Secc. F</option>
-            <option value="G">Secc. G</option>
-            <option value="H">Secc. H</option>
-        </select>
-    </div>
-
-    <div class="total-banner">
-        <span>Total:</span>
-        <span>S/ <span id="totalVal">0.00</span></span>
-    </div>
-
-    <div class="aviso-entrega">🛵 ENTREGA EN RECREO - TURNO TARDE</div>
-
-    <button class="btn-wsp" onclick="enviarPedido()">
-        <span>🚀</span> PEDIR POR WHATSAPP
-    </button>
-
-    <div class="seccion-info">
-        <h3 style="margin: 0;">⭐ Comunidad</h3>
-        <input id="revNombre" placeholder="Tu nombre">
-        <div class="stars-input" id="starSelector">
-            <span class="star-off" onclick="setRate(1)">★</span><span class="star-off" onclick="setRate(2)">★</span><span class="star-off" onclick="setRate(3)">★</span><span class="star-off" onclick="setRate(4)">★</span><span class="star-off" onclick="setRate(5)">★</span>
-        </div>
-        <textarea id="revComento" rows="2" placeholder="¿Qué tal las galletas?"></textarea>
-        <button id="btnPub" onclick="publicar()" style="background:var(--verde); color:white; border:none; width:100%; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer;">Publicar Opinión</button>
-        <div class="opiniones-container" id="listaOpiniones"></div>
-    </div>
-
-    <div class="seccion-info">
-        <h4>🥣 Ingredientes</h4>
-        <p style="font-size: 13px; color: #555; line-height: 1.6; margin: 0;">
-            Harina de trigo fortificada, azúcar rubia, avena en hojuelas, aceite vegetal premium, huevo fresco, leche entera, polvo de hornear, esencia de vainilla y una pizca de sal.
-        </p>
-    </div>
-
-    <div class="seccion-info">
-        <h4>📊 Nutrición (Porción 25g)</h4>
-        <div class="nutri-table">
-            <div class="nutri-item"><span>Energía</span> <b>110 kcal</b></div>
-            <div class="nutri-item"><span>Proteína</span> <b>2.1 g</b></div>
-            <div class="nutri-item"><span>Grasas Totales</span> <b>4.2 g</b></div>
-            <div class="nutri-item"><span>Grasas Sat.</span> <b>0.8 g</b></div>
-            <div class="nutri-item"><span>Carbohidratos</span> <b>16.5 g</b></div>
-            <div class="nutri-item"><span>Azúcares</span> <b>5.2 g</b></div>
-            <div class="nutri-item"><span>Fibra</span> <b>1.1 g</b></div>
-            <div class="nutri-item"><span>Sodio</span> <b>45 mg</b></div>
-        </div>
-        <p style="font-size: 10px; color: #888; margin-top: 8px; text-align: center;">*Valores aproximados basados en ingredientes estándar.</p>
-    </div>
-
-    <div class="seccion-info">
-        <h4>📸 Galería Héctor Bites</h4>
-        <div class="galeria-grid">
-            <div class="cuadro-elegante cuadro-grande">
-                <img src="IMG_20260408_232746-removebg-preview.png" alt="Nuestras Galletas">
-            </div>
-            <div class="cuadro-elegante">
-                <img src="IMG_20260408_231438-removebg-preview.png" alt="Galleta Individual">
-            </div>
-            <div class="cuadro-elegante">
-                <img src="IMG_20260408_233101-removebg-preview.png" alt="Pack Duo">
+        <div id="sec-pedir" class="section active">
+            <div class="card">
+                <h3 style="margin-top:0">Haz tu pedido 🍪</h3>
+                <div class="producto-card">
+                    <div><b>1 Galleta</b><br><small>S/ 0.60</small></div>
+                    <div class="controles">
+                        <button class="btn-cant" onclick="cambiar('u', -1)">-</button>
+                        <b id="cantU">0</b>
+                        <button class="btn-cant" onclick="cambiar('u', 1)">+</button>
+                    </div>
+                </div>
+                <div class="producto-card">
+                    <div><b>Pack Duo</b><br><small>S/ 1.00</small></div>
+                    <div class="controles">
+                        <button class="btn-cant" onclick="cambiar('p', -1)">-</button>
+                        <b id="cantP">0</b>
+                        <button class="btn-cant" onclick="cambiar('p', 1)">+</button>
+                    </div>
+                </div>
+                <input id="pedNombre" placeholder="Tu nombre">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <select id="pedGrado">
+                        <option value="5to Prim.">5to Primaria</option>
+                        <option value="1ro Sec.">1ro Sec.</option>
+                        <option value="2do Sec.">2do Sec.</option>
+                        <option value="3ro Sec.">3ro Sec.</option>
+                        <option value="4to Sec.">4to Sec.</option>
+                        <option value="5to Sec.">5to Sec.</option>
+                    </select>
+                    <select id="pedSeccion">
+                        <option value="A">Secc. A</option><option value="B">Secc. B</option><option value="C">Secc. C</option>
+                    </select>
+                </div>
+                <div class="total-banner">
+                    <span>Total:</span>
+                    <span>S/ <span id="totalVal">0.00</span></span>
+                </div>
+                <button class="btn-wsp" onclick="enviarPedido()">🚀 PEDIR POR WHATSAPP</button>
+                <p style="font-size:10px; color:red; text-align:center; margin-top:10px;">🛵 ENTREGA EN RECREO - TURNO TARDE</p>
             </div>
         </div>
+
+        <div id="sec-raspa" class="section">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>Raspa y Puntos</h3>
+                    <div class="puntos-tag" id="userPuntos">0 pts</div>
+                </div>
+                <p style="font-size:12px;">Ingresa el código de tu envoltura:</p>
+                <input type="text" id="codInput" placeholder="HB-XXXX">
+                <button class="btn-wsp" style="background:var(--verde)" onclick="verificarCod()">VERIFICAR</button>
+
+                <div id="juego-wrap">
+                    <div id="premio-bg"></div>
+                    <canvas id="canvas" width="300" height="150"></canvas>
+                </div>
+                <div id="btnCanjeExtra"></div>
+            </div>
+        </div>
+
+        <div id="sec-comunidad" class="section">
+            <div class="card">
+                <h3>Comunidad ⭐</h3>
+                <input id="revNombre" placeholder="Tu nombre">
+                <div class="stars-input" id="starSelector">
+                    <span class="star-off" onclick="setRate(1)">★</span><span class="star-off" onclick="setRate(2)">★</span><span class="star-off" onclick="setRate(3)">★</span><span class="star-off" onclick="setRate(4)">★</span><span class="star-off" onclick="setRate(5)">★</span>
+                </div>
+                <textarea id="revComento" rows="2" placeholder="¿Qué tal las galletas?"></textarea>
+                <button onclick="publicar()" style="background:var(--verde); color:white; border:none; width:100%; padding:12px; border-radius:12px; font-weight:bold;">Publicar Opinión</button>
+                <div id="listaOpiniones" style="margin-top:20px;"></div>
+            </div>
+        </div>
+
+        <div id="sec-info" class="section">
+            <div class="card">
+                <h4>🥣 Ingredientes</h4>
+                <p style="font-size:13px; color:#555;">Avena, harina fortificada, azúcar rubia, huevo, leche y vainilla.</p>
+                <hr>
+                <h4>📊 Nutrición (25g)</h4>
+                <div style="font-size:12px; display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                    <div>Energía: 110 kcal</div><div>Grasas: 4.2g</div>
+                    <div>Proteína: 2.1g</div><div>Carbos: 16.5g</div>
+                </div>
+            </div>
+        </div>
+
     </div>
-</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
+// --- CONFIGURACIÓN FIREBASE ---
 const firebaseConfig = {
     apiKey: "AIzaSyAJb-fRgRJlMS1AZDmRs1iRZivbVb2xIaY",
     authDomain: "hector-bites.firebaseapp.com",
@@ -293,24 +229,33 @@ const firebaseConfig = {
     messagingSenderId: "871681076585",
     appId: "1:871681076585:web:ef3ead36c2b21ec70021f8"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let myUid = "";
+let misPuntos = parseInt(localStorage.getItem('hb_puntos')) || 0;
 
-firebase.auth().signInAnonymously().then(u => {
-    myUid = u.user.uid;
-});
+firebase.auth().signInAnonymously().then(u => { myUid = u.user.uid; });
 
-// LÓGICA DE PEDIDOS
+// --- NAVEGACIÓN ---
+function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('overlay').style.display = document.getElementById('overlay').style.display === 'block' ? 'none' : 'block';
+}
+
+function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if(id === 'sec-raspa') document.getElementById('userPuntos').innerText = misPuntos + " pts";
+    toggleMenu();
+}
+
+// --- LÓGICA PEDIDOS ---
 let unid = 0, pack = 0;
-function cambiar(tipo, valor) {
-    if(tipo === 'u') unid = Math.max(0, unid + valor);
-    if(tipo === 'p') pack = Math.max(0, pack + valor);
+function cambiar(t, v) {
+    if(t==='u') unid = Math.max(0, unid+v); else pack = Math.max(0, pack+v);
     document.getElementById("cantU").innerText = unid;
     document.getElementById("cantP").innerText = pack;
-    let total = (unid * 0.60) + (pack * 1.00);
-    document.getElementById("totalVal").innerText = total.toFixed(2);
+    document.getElementById("totalVal").innerText = ((unid*0.6)+(pack*1)).toFixed(2);
 }
 
 function enviarPedido() {
@@ -318,59 +263,74 @@ function enviarPedido() {
     const g = document.getElementById("pedGrado").value;
     const s = document.getElementById("pedSeccion").value;
     const t = document.getElementById("totalVal").innerText;
-    if(!n || (unid === 0 && pack === 0)) return alert("Completa tu nombre y el pedido");
-    const msg = `*PEDIDO HÉCTOR BITES*\n👤 *Alumno:* ${n}\n📍 *Aula:* ${g} "${s}"\n🍪 *1 Galleta:* ${unid}\n🎁 *Pack Duo:* ${pack}\n💰 *Total:* S/ ${t}`;
+    if(!n || t == "0.00") return alert("Completa tus datos");
+    const msg = `*NUEVO PEDIDO*\n👤 ${n}\n📍 Aula: ${g} ${s}\n🍪 Galletas: ${unid}\n🎁 Pack Duo: ${pack}\n💰 Total: S/ ${t}`;
     window.open(`https://wa.me/51975754119?text=${encodeURIComponent(msg)}`);
 }
 
-// LÓGICA DE RESEÑAS
+// --- LÓGICA RASPADO Y PUNTOS ---
+function verificarCod() {
+    const cod = document.getElementById('codInput').value.trim().toUpperCase();
+    if(cod.length < 4) return alert("Código inválido");
+
+    let hash = 0;
+    for (let i = 0; i < cod.length; i++) hash = cod.charCodeAt(i) + ((hash << 5) - hash);
+    const gano = (Math.abs(hash) % 100) < 3;
+
+    document.getElementById('juego-wrap').style.display = 'block';
+    const txt = document.getElementById('premio-bg');
+
+    if(gano) {
+        txt.innerHTML = "<span style='color:green'>🎉 ¡GANASTE UNA GALLETA!</span>";
+        document.getElementById('btnCanjeExtra').innerHTML = `<button class="btn-wsp" onclick="window.open('https://wa.me/51975754119?text=Gané con el código ${cod}')">RECLAMAR PREMIO</button>`;
+    } else {
+        misPuntos += 10;
+        localStorage.setItem('hb_puntos', misPuntos);
+        document.getElementById('userPuntos').innerText = misPuntos + " pts";
+        txt.innerHTML = "<span style='color:gray'>😢 SIGUE INTENTANDO<br>+10 PUNTOS</span>";
+        document.getElementById('btnCanjeExtra').innerHTML = misPuntos >= 100 ? `<button class="btn-wsp" style="background:orange" onclick="alert('Canjeaste 100 puntos por galleta!')">CANJEAR 100 PTS</button>` : "";
+    }
+    initCanvas();
+}
+
+function initCanvas() {
+    const c = document.getElementById("canvas"), ctx = c.getContext("2d");
+    ctx.globalCompositeOperation="source-over"; ctx.fillStyle="#bbb"; ctx.fillRect(0,0,300,150);
+    ctx.fillStyle="white"; ctx.font="bold 16px Arial"; ctx.textAlign="center"; ctx.fillText("RASPA AQUÍ", 150, 85);
+    const ras = (e) => {
+        const r = c.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - r.left, y = (e.clientY || e.touches[0].clientY) - r.top;
+        ctx.globalCompositeOperation="destination-out"; ctx.beginPath(); ctx.arc(x,y,20,0,Math.PI*2); ctx.fill();
+    };
+    c.ontouchmove = (e) => { e.preventDefault(); ras(e); };
+    c.onmousemove = (e) => { if(e.buttons==1) ras(e); };
+}
+
+// --- RESEÑAS (TUS FUNCIONES DE FIREBASE) ---
 let currentRate = 0;
 function setRate(n) {
     currentRate = n;
-    const stars = document.getElementById("starSelector").children;
-    for(let i=0; i<5; i++) {
-        stars[i].className = i < n ? "star-on" : "star-off";
-    }
+    const s = document.getElementById("starSelector").children;
+    for(let i=0; i<5; i++) s[i].className = i < n ? "star-on" : "star-off";
 }
 
 function publicar() {
-    const nom = document.getElementById("revNombre").value;
-    const com = document.getElementById("revComento").value;
-    if(!nom || !com || currentRate === 0) return alert("Por favor, llena todos los campos de la reseña");
-    
-    db.collection("opiniones").add({ 
-        nombre: nom, 
-        comentario: com, 
-        estrellas: currentRate, 
-        fecha: Date.now(), 
-        author: myUid 
-    });
-    
-    document.getElementById("revComento").value = "";
-    setRate(0);
-}
-
-function borrarOpinion(id) {
-    if(confirm("¿Seguro que quieres eliminar tu comentario?")) {
-        db.collection("opiniones").doc(id).delete();
-    }
+    const nom = document.getElementById("revNombre").value, com = document.getElementById("revComento").value;
+    if(!nom || !com || currentRate === 0) return alert("Completa la reseña");
+    db.collection("opiniones").add({ nombre: nom, comentario: com, estrellas: currentRate, fecha: Date.now(), author: myUid });
+    document.getElementById("revComento").value = ""; setRate(0);
 }
 
 db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
-    let html = "";
+    let h = "";
     snap.forEach(doc => {
         const op = doc.data();
-        const esMio = op.author === myUid;
-        
-        html += `
-        <div class="opinion-card">
-            ${esMio ? `<button class="btn-delete" onclick="borrarOpinion('${doc.id}')">🗑️</button>` : ''}
-            <b style="color:var(--verde)">${op.nombre}</b> 
-            <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span>
-            <p style="font-size:13px; margin:5px 0; padding-right:20px;">${op.comentario}</p>
+        h += `<div class="opinion-card">
+            <b style="color:var(--verde)">${op.nombre}</b> <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span>
+            <p style="font-size:12px; margin:5px 0;">${op.comentario}</p>
         </div>`;
     });
-    document.getElementById("listaOpiniones").innerHTML = html;
+    document.getElementById("listaOpiniones").innerHTML = h;
 });
 </script>
 </body>
