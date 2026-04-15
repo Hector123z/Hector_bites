@@ -83,7 +83,7 @@ body {
 .controles { display: flex; align-items: center; gap: 12px; background: var(--blanco); padding: 6px 12px; border-radius: 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 .btn-cant { width: 32px; height: 32px; border: none; border-radius: 50%; background: var(--verde); color: white; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
 
-input, select, textarea { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #e0e0e0; border-radius: 15px; font-size: 15px; outline: none; background: #fff; }
+input, select, textarea { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #e0e0e0; border-radius: 15px; font-size: 15px; outline: none; background: #fff; box-sizing: border-box; }
 
 .total-banner {
     background: var(--verde-fuerte);
@@ -164,6 +164,8 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
                     <select id="pedSeccion">
                         <option value="A">Secc. A</option><option value="B">Secc. B</option>
                         <option value="C">Secc. C</option><option value="D">Secc. D</option>
+                        <option value="E">Secc. E</option><option value="F">Secc. F</option>
+                        <option value="G">Secc. G</option><option value="H">Secc. H</option>
                     </select>
                 </div>
                 
@@ -201,7 +203,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
                 </div>
                 <div class="canje-card">
                     <div><b>1 Galleta Gratis</b><br><small>100 puntos</small></div>
-                    <button onclick="canjearPuntos(100, 'Galleta Gratis')">CANJEAR</button>
+                    <button onclick="canjearPuntos(100, 'Galleta Gratis')" style="background: var(--dorado); border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold;">CANJEAR</button>
                 </div>
             </div>
         </div>
@@ -221,8 +223,18 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
 
         <div id="sec-info" class="section">
             <div class="card">
-                <h4 style="color:var(--verde);">📋 Información Nutricional</h4>
-                <p>Ingredientes naturales y saludables para tu recreo.</p>
+                <h3 style="color:var(--verde); margin-top:0;">📋 Información Nutricional</h3>
+                <p style="font-size:14px;"><b>Ingredientes:</b> Avena selecta de grano entero, harina fortificada, azúcar rubia natural, huevo fresco, leche descremada y esencia de vainilla premium.</p>
+                <hr style="border:0; border-top:1px solid #eee; margin: 15px 0;">
+                <h4 style="color:var(--verde); margin-bottom: 10px;">Valores por Galleta (25g)</h4>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:13px;">
+                    <div style="background:var(--gris-fondo); padding:10px; border-radius:12px; border: 1px solid #eee;">🔥 Energía: 110 kcal</div>
+                    <div style="background:var(--gris-fondo); padding:10px; border-radius:12px; border: 1px solid #eee;">🥑 Grasas: 4.2g</div>
+                    <div style="background:var(--gris-fondo); padding:10px; border-radius:12px; border: 1px solid #eee;">💪 Proteína: 2.1g</div>
+                    <div style="background:var(--gris-fondo); padding:10px; border-radius:12px; border: 1px solid #eee;">🍞 Carbos: 16.5g</div>
+                    <div style="background:var(--gris-fondo); padding:10px; border-radius:12px; border: 1px solid #eee;">🌾 Fibra: 1.8g</div>
+                    <div style="background:var(--gris-fondo); padding:10px; border-radius:12px; border: 1px solid #eee;">🧂 Sodio: 45mg</div>
+                </div>
             </div>
         </div>
 
@@ -245,7 +257,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let myUid = "";
 let misPuntos = parseInt(localStorage.getItem('hb_puntos')) || 0;
-let CODS_VALIDOS = []; // Se llena desde Firebase
+let CODS_VALIDOS = []; 
 
 firebase.auth().signInAnonymously().then(u => { myUid = u.user.uid; });
 
@@ -253,7 +265,7 @@ firebase.auth().signInAnonymously().then(u => { myUid = u.user.uid; });
 db.collection("Config").doc("ListaOficial").onSnapshot((doc) => {
     if (doc.exists) {
         CODS_VALIDOS = doc.data().codigos;
-        console.log("Nube sincronizada");
+        console.log("Nube sincronizada: " + CODS_VALIDOS.length + " códigos cargados.");
     }
 });
 
@@ -286,21 +298,24 @@ function cambiar(t, v) {
 
 function enviarPedido() {
     const n = document.getElementById("pedNombre").value;
+    const g = document.getElementById("pedGrado").value;
+    const s = document.getElementById("pedSeccion").value;
     const t = document.getElementById("totalVal").innerText;
-    if(!n || t == "0.00") return alert("Ingresa datos");
-    const msg = `*NUEVO PEDIDO*\nNombre: ${n}\nTotal: S/ ${t}`;
+    if(!n || t == "0.00") return alert("Ingresa tu nombre y elige galletas");
+    const msg = `*NUEVO PEDIDO HÉCTOR BITES*\n👤 Nombre: ${n}\n📍 Aula: ${g} - ${s}\n🍪 Galletas: ${unid}\n🎁 Packs: ${pack}\n💰 Total: S/ ${t}`;
     window.open(`https://wa.me/51975754119?text=${encodeURIComponent(msg)}`);
 }
 
 async function verificarCod() {
     const cod = document.getElementById('codInput').value.trim().toUpperCase();
-    if (!CODS_VALIDOS.includes(cod)) return alert("❌ Código inválido.");
+    if (!CODS_VALIDOS.includes(cod)) return alert("❌ Código inválido. Revisa si lo escribiste bien.");
 
     try {
         const docRef = db.collection("Codigos").doc(cod);
         const doc = await docRef.get();
-        if (doc.exists) return alert("⚠️ Ya usado.");
+        if (doc.exists) return alert("⚠️ Este código ya fue usado.");
 
+        // Marcamos como usado ANTES de dar puntos para evitar duplicidad
         await docRef.set({ usado: true, usuario: myUid, fecha: Date.now() });
 
         let hash = 0;
@@ -309,33 +324,40 @@ async function verificarCod() {
 
         document.getElementById('juego-wrap').style.display = 'block';
         if(gano) {
-            document.getElementById('premio-bg').innerHTML = "🏆 GANASTE";
+            document.getElementById('premio-bg').innerHTML = "🏆 ¡GANASTE UNA GALLETA!";
+            document.getElementById('btnCanjeExtra').innerHTML = `<button class="btn-wsp" onclick="window.open('https://wa.me/51975754119?text=Gané con el código ${cod}')">RECLAMAR PREMIO</button>`;
         } else {
-            misPuntos += 10;
+            misPuntos += 10; // SOLO SUMA 10 PUNTOS UNA VEZ
             localStorage.setItem('hb_puntos', misPuntos);
             updatePuntosUI();
-            document.getElementById('premio-bg').innerHTML = "+10 PUNTOS";
+            document.getElementById('premio-bg').innerHTML = "❌ +10 PUNTOS";
+            document.getElementById('btnCanjeExtra').innerHTML = "<p style='color:green; font-weight:bold; text-align:center;'>¡Código válido! Se sumaron 10 puntos.</p>";
         }
         initCanvas();
-    } catch (e) { alert("Error"); }
+    } catch (e) { alert("Error de conexión. Inténtalo de nuevo."); }
 }
 
 function initCanvas() {
     const c = document.getElementById("canvas"), ctx = c.getContext("2d");
-    ctx.fillStyle="#c0c0c0"; ctx.fillRect(0,0,300,150);
+    ctx.globalCompositeOperation="source-over"; ctx.fillStyle="#c0c0c0"; ctx.fillRect(0,0,300,150);
+    ctx.fillStyle="#555"; ctx.font="bold 16px Arial"; ctx.textAlign="center"; ctx.fillText("RASPA AQUÍ", 150, 80);
     const ras = (e) => {
         const r = c.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - r.left;
-        const y = (e.clientY || e.touches[0].clientY) - r.top;
+        const x = (e.clientX || (e.touches ? e.touches[0].clientX : 0)) - r.left;
+        const y = (e.clientY || (e.touches ? e.touches[0].clientY : 0)) - r.top;
         ctx.globalCompositeOperation="destination-out"; ctx.beginPath(); ctx.arc(x,y,20,0,Math.PI*2); ctx.fill();
     };
     c.ontouchmove = (e) => { e.preventDefault(); ras(e); };
+    c.onmousemove = (e) => { if(e.buttons==1) ras(e); };
 }
 
 function canjearPuntos(c, i) {
-    if (misPuntos < c) return alert("Puntos insuficientes");
-    misPuntos -= c; localStorage.setItem('hb_puntos', misPuntos);
-    updatePuntosUI(); alert("Canje exitoso");
+    if (misPuntos < c) return alert("Aún no tienes los puntos suficientes.");
+    if(confirm(`¿Canjear ${c} puntos por ${i}?`)) {
+        misPuntos -= c; localStorage.setItem('hb_puntos', misPuntos);
+        updatePuntosUI();
+        window.open(`https://wa.me/51975754119?text=Hola Héctor, canjeé mis puntos por: ${i}`);
+    }
 }
 
 let currentRate = 0;
@@ -347,19 +369,22 @@ function setRate(n) {
 
 function publicar() {
     const nom = document.getElementById("revNombre").value, com = document.getElementById("revComento").value;
-    if(!nom || !com || currentRate === 0) return alert("Completa campos");
+    if(!nom || !com || currentRate === 0) return alert("Por favor completa todos los campos de opinión.");
     db.collection("opiniones").add({ nombre: nom, comentario: com, estrellas: currentRate, fecha: Date.now() });
     document.getElementById("revComento").value = ""; setRate(0);
 }
 
 // CARGA DE OPINIONES EN VIVO
-db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
+db.collection("opiniones").orderBy("fecha","desc").limit(10).onSnapshot(snap => {
     let h = "";
     snap.forEach(doc => {
         const op = doc.data();
-        h += `<div class="card" style="padding:10px; margin-bottom:5px;">
-            <b>${op.nombre}</b> ${"⭐".repeat(op.estrellas)}<br>
-            <small>${op.comentario}</small>
+        h += `<div class="card" style="padding:15px; margin-bottom:10px; border:1px solid #eee;">
+            <div style="display:flex; justify-content:space-between;">
+                <b>${op.nombre}</b>
+                <span style="color:#FFD700;">${"★".repeat(op.estrellas)}</span>
+            </div>
+            <p style="margin:8px 0 0 0; font-size:14px; color:#555;">${op.comentario}</p>
         </div>`;
     });
     document.getElementById("listaOpiniones").innerHTML = h;
