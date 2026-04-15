@@ -389,7 +389,19 @@ db.collection("opiniones").orderBy("fecha","desc").limit(10).onSnapshot(snap => 
     });
     document.getElementById("listaOpiniones").innerHTML = h;
 });
+// --- BLOQUE DE SEGURIDAD PARA NAVEGADOR ---
+window.onload = function() {
+    updatePuntosUI(); // Carga tus puntos al iniciar
 
+    // Verificamos si es Chrome original
+    const esChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    const esBrave = (navigator.brave !== undefined);
+
+    // Si detecta Brave o cualquier otro navegador que no sea Chrome, lanza el aviso
+    if (esBrave || !esChrome) {
+        alert("⚠️ ¡AVISO IMPORTANTE!\n\nPara que tus CÓDIGOS funcionen y no pierdas tus PUNTOS, debes usar el navegador GOOGLE CHROME.\n\nCopia este link y pégalo en Chrome:\nhttps://hector123z.github.io/Hector_bites/");
+    }
+};
 window.onload = updatePuntosUI;
 </script>
 </body>
