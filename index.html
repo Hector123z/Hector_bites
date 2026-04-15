@@ -51,7 +51,7 @@ body {
     height: 100vh;
     background: var(--blanco);
     transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 3000; /* Prioridad máxima */
+    z-index: 3000;
     box-shadow: 10px 0 20px rgba(0,0,0,0.2);
     padding-top: 10px;
 }
@@ -84,7 +84,6 @@ body {
 .btn-cant { width: 32px; height: 32px; border: none; border-radius: 50%; background: var(--verde); color: white; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
 
 input, select, textarea { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #e0e0e0; border-radius: 15px; font-size: 15px; outline: none; background: #fff; }
-input:focus { border-color: var(--verde); }
 
 .total-banner {
     background: var(--verde-fuerte);
@@ -98,7 +97,7 @@ input:focus { border-color: var(--verde); }
     margin: 15px 0;
 }
 
-.btn-wsp { background: var(--wsp); color: white; border: none; width: 100%; padding: 18px; border-radius: 18px; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+.btn-wsp { background: var(--wsp); color: white; border: none; width: 100%; padding: 18px; border-radius: 18px; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
 /* --- RASPADO --- */
 #juego-wrap { display: none; margin: 20px auto; position: relative; width: 100%; max-width: 300px; height: 150px; }
@@ -106,7 +105,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
 #premio-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 800; background: #fff; border-radius: 20px; z-index: 1; border: 2px dashed #ddd; font-size: 20px; }
 
 /* --- PUNTOS Y TAGS --- */
-.puntos-tag { background: var(--dorado); color: #000; padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 14px; box-shadow: 0 3px 8px rgba(255, 215, 0, 0.4); }
+.puntos-tag { background: var(--dorado); color: #000; padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 14px; }
 .canje-card { background: var(--gris-fondo); padding: 18px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border: 1px solid #eee; }
 
 /* ESTRELLAS */
@@ -158,15 +157,13 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <select id="pedGrado">
-                        <option value="3ro Sec.">3ro Secundaria</option>
-                        <option value="4to Sec.">4to Secundaria</option>
-                        <option value="5to Sec.">5to Secundaria</option>
+                        <option value="3ro Sec.">3ro Sec.</option>
+                        <option value="4to Sec.">4to Sec.</option>
+                        <option value="5to Sec.">5to Sec.</option>
                     </select>
                     <select id="pedSeccion">
                         <option value="A">Secc. A</option><option value="B">Secc. B</option>
                         <option value="C">Secc. C</option><option value="D">Secc. D</option>
-                        <option value="E">Secc. E</option><option value="F">Secc. F</option>
-                        <option value="G">Secc. G</option><option value="H">Secc. H</option>
                     </select>
                 </div>
                 
@@ -176,7 +173,6 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
                 </div>
                 
                 <button class="btn-wsp" onclick="enviarPedido()">🚀 ENVIAR A WHATSAPP</button>
-                <p style="font-size:11px; color:#d32f2f; text-align:center; font-weight:bold; margin-top:15px;">🛵 ENTREGAS EN EL RECREO - TURNO TARDE</p>
             </div>
         </div>
 
@@ -186,9 +182,8 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
                     <h3 style="margin:0; color:var(--verde)">Juega y Gana</h3>
                     <div class="puntos-tag" id="userPuntos">0 pts</div>
                 </div>
-                <p style="font-size:13px;">Ingresa el código que viene en tu empaque:</p>
-                <input type="text" id="codInput" placeholder="EJ: HB-XXXX" style="text-align: center; font-weight: bold; font-size: 18px;">
-                <button class="btn-wsp" style="background:var(--verde); box-shadow:none;" onclick="verificarCod()">VERIFICAR CÓDIGO</button>
+                <input type="text" id="codInput" placeholder="EJ: HB-XXXX" style="text-align: center; font-weight: bold;">
+                <button class="btn-wsp" style="background:var(--verde);" onclick="verificarCod()">VERIFICAR CÓDIGO</button>
 
                 <div id="juego-wrap">
                     <div id="premio-bg"></div>
@@ -204,16 +199,10 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
                     <h3 style="margin:0; color:var(--verde)">Tienda de Canje 🛒</h3>
                     <div class="puntos-tag" id="ptsTiendaDisplay">0 pts</div>
                 </div>
-                <p style="font-size: 13px; color: #666;">Si pierdes en el Raspa, ¡aquí cambias tus puntos!</p>
-                
                 <div class="canje-card">
-                    <div>
-                        <b style="font-size:16px;">1 Galleta Gratis</b><br>
-                        <small style="color:var(--verde); font-weight:bold;">Costo: 100 puntos</small>
-                    </div>
-                    <button onclick="canjearPuntos(100, 'Galleta Gratis')" style="background: var(--dorado); color: black; border: none; padding: 10px 15px; border-radius: 12px; font-weight: 800; cursor: pointer;">CANJEAR</button>
+                    <div><b>1 Galleta Gratis</b><br><small>100 puntos</small></div>
+                    <button onclick="canjearPuntos(100, 'Galleta Gratis')">CANJEAR</button>
                 </div>
-                <p style="font-size:10px; text-align:center; margin-top:20px; color:#999;">Los puntos se acumulan solo en este celular.</p>
             </div>
         </div>
 
@@ -221,27 +210,19 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
             <div class="card">
                 <h3 style="color:var(--verde)">Opiniones ⭐</h3>
                 <input id="revNombre" placeholder="Tu nombre">
-                <div class="stars-input" id="starSelector">
+                <div id="starSelector">
                     <span class="star-off" onclick="setRate(1)">★</span><span class="star-off" onclick="setRate(2)">★</span><span class="star-off" onclick="setRate(3)">★</span><span class="star-off" onclick="setRate(4)">★</span><span class="star-off" onclick="setRate(5)">★</span>
                 </div>
-                <textarea id="revComento" rows="2" placeholder="Escribe tu reseña aquí..."></textarea>
-                <button class="btn-wsp" style="background:var(--verde); padding:12px;" onclick="publicar()">PUBLICAR</button>
+                <textarea id="revComento" rows="2" placeholder="Tu reseña..."></textarea>
+                <button class="btn-wsp" style="background:var(--verde);" onclick="publicar()">PUBLICAR</button>
                 <div id="listaOpiniones" style="margin-top:20px;"></div>
             </div>
         </div>
 
         <div id="sec-info" class="section">
             <div class="card">
-                <h4 style="color:var(--verde); margin-top:0;">📋 Información</h4>
-                <p style="font-size:14px; line-height:1.5;"><b>Ingredientes:</b> Avena selecta, harina fortificada, azúcar rubia natural, huevo fresco, leche y esencia de vainilla premium.</p>
-                <hr style="border:0; border-top:1px solid #eee;">
-                <h4 style="color:var(--verde);">📊 Tabla Nutricional (25g)</h4>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:13px;">
-                    <div style="background:var(--gris-fondo); padding:8px; border-radius:10px;">Energía: 110 kcal</div>
-                    <div style="background:var(--gris-fondo); padding:8px; border-radius:10px;">Grasas: 4.2g</div>
-                    <div style="background:var(--gris-fondo); padding:8px; border-radius:10px;">Proteína: 2.1g</div>
-                    <div style="background:var(--gris-fondo); padding:8px; border-radius:10px;">Carbos: 16.5g</div>
-                </div>
+                <h4 style="color:var(--verde);">📋 Información Nutricional</h4>
+                <p>Ingredientes naturales y saludables para tu recreo.</p>
             </div>
         </div>
 
@@ -252,7 +233,6 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
-// --- FIREBASE ---
 const firebaseConfig = {
     apiKey: "AIzaSyAJb-fRgRJlMS1AZDmRs1iRZivbVb2xIaY",
     authDomain: "hector-bites.firebaseapp.com",
@@ -265,13 +245,18 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let myUid = "";
 let misPuntos = parseInt(localStorage.getItem('hb_puntos')) || 0;
+let CODS_VALIDOS = []; // Se llena desde Firebase
 
 firebase.auth().signInAnonymously().then(u => { myUid = u.user.uid; });
 
-// --- LISTA OFICIAL DE CÓDIGOS ---
-const CODS_VALIDOS = ["HB-B3N","HB-U9J","HB-Q5U","HB-F8V","HB-F6D","HB-B9Z","HB-N2K","HB-D9E","HB-M4S","HB-H4X","HB-P4E","HB-F3V","HB-K2H","HB-D9P","HB-J4N","HB-U7A","HB-W3V","HB-U7P","HB-B8F","HB-Y8L","HB-Y7G","HB-E3H","HB-H7F","HB-F9U","HB-T2G","HB-M5B","HB-Q2Q","HB-T5R","HB-Q5K","HB-U9S","HB-D8B","HB-K3Z","HB-U6S","HB-T8N","HB-V6T","HB-Y9J","HB-G9K","HB-V9G","HB-W2R","HB-E8Z","HB-W7S","HB-V5K","HB-N9S","HB-X9M","HB-L6Z","HB-H9G","HB-R5K","HB-K2G","HB-M7P","HB-F5A","HB-N8S","HB-W2V","HB-P9A","HB-H4M","HB-S5K","HB-K5C","HB-F9H","HB-F5P","HB-M4M","HB-M9D","HB-D4X","HB-M2M","HB-M3R","HB-B7V","HB-V8T","HB-V5A","HB-P7D","HB-X2P","HB-C8H","HB-N8X","HB-Z6H","HB-X3P","HB-N2R","HB-N9Q","HB-P7Y","HB-G9U","HB-M2C","HB-A9T","HB-R8E","HB-N2F","HB-K9A","HB-A3A","HB-J3C","HB-E7E","HB-D2M","HB-D5G","HB-T8E","HB-L6H","HB-M3Y","HB-R3A","HB-H4S","HB-B5V","HB-V5W","HB-Y7B","HB-P8B","HB-H6C","HB-H3Q","HB-W5E","HB-Q6E","HB-E6H"];
+// --- SINCRONIZACIÓN DE CÓDIGOS DESDE LA NUBE ---
+db.collection("Config").doc("ListaOficial").onSnapshot((doc) => {
+    if (doc.exists) {
+        CODS_VALIDOS = doc.data().codigos;
+        console.log("Nube sincronizada");
+    }
+});
 
-// --- NAVEGACIÓN ---
 function toggleMenu() {
     const side = document.getElementById('sidebar');
     const over = document.getElementById('overlay');
@@ -281,23 +266,16 @@ function toggleMenu() {
 
 function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    const target = document.getElementById(id);
-    if(target) target.classList.add('active');
-    
+    document.getElementById(id).classList.add('active');
     updatePuntosUI();
-    const side = document.getElementById('sidebar');
-    const over = document.getElementById('overlay');
-    side.classList.remove('active');
-    over.style.display = 'none';
-    window.scrollTo(0,0);
+    toggleMenu();
 }
 
 function updatePuntosUI() {
-    if(document.getElementById('userPuntos')) document.getElementById('userPuntos').innerText = misPuntos + " pts";
-    if(document.getElementById('ptsTiendaDisplay')) document.getElementById('ptsTiendaDisplay').innerText = misPuntos + " pts";
+    document.getElementById('userPuntos').innerText = misPuntos + " pts";
+    document.getElementById('ptsTiendaDisplay').innerText = misPuntos + " pts";
 }
 
-// --- PEDIDOS ---
 let unid = 0, pack = 0;
 function cambiar(t, v) {
     if(t==='u') unid = Math.max(0, unid+v); else pack = Math.max(0, pack+v);
@@ -308,94 +286,58 @@ function cambiar(t, v) {
 
 function enviarPedido() {
     const n = document.getElementById("pedNombre").value;
-    const g = document.getElementById("pedGrado").value;
-    const s = document.getElementById("pedSeccion").value;
     const t = document.getElementById("totalVal").innerText;
-    if(!n || t == "0.00") return alert("Por favor ingresa tu nombre y elige galletas");
-    const msg = `*PEDIDO HÉCTOR BITES*\n👤 Alumno: ${n}\n📍 Aula: ${g} ${s}\n🍪 Galletas: ${unid}\n🎁 Pack Duo: ${pack}\n💰 TOTAL: S/ ${t}`;
+    if(!n || t == "0.00") return alert("Ingresa datos");
+    const msg = `*NUEVO PEDIDO*\nNombre: ${n}\nTotal: S/ ${t}`;
     window.open(`https://wa.me/51975754119?text=${encodeURIComponent(msg)}`);
 }
 
-// --- RASPADO ---
 async function verificarCod() {
-    const codInput = document.getElementById('codInput');
-    const cod = codInput.value.trim().toUpperCase();
-    const bg = document.getElementById('premio-bg');
-    const wrap = document.getElementById('juego-wrap');
-    const btnEx = document.getElementById('btnCanjeExtra');
-
-    wrap.style.display = 'none';
-    btnEx.innerHTML = "";
-
-    if (!CODS_VALIDOS.includes(cod)) {
-        return alert("❌ Este código no existe.");
-    }
+    const cod = document.getElementById('codInput').value.trim().toUpperCase();
+    if (!CODS_VALIDOS.includes(cod)) return alert("❌ Código inválido.");
 
     try {
         const docRef = db.collection("Codigos").doc(cod);
         const doc = await docRef.get();
+        if (doc.exists) return alert("⚠️ Ya usado.");
 
-        if (doc.exists) {
-            return alert("⚠️ Este código ya fue tachado anteriormente.");
-        }
-
-        await docRef.set({
-            usado: true,
-            fechaUso: firebase.firestore.FieldValue.serverTimestamp(),
-            usuario: myUid
-        });
+        await docRef.set({ usado: true, usuario: myUid, fecha: Date.now() });
 
         let hash = 0;
         for (let i = 0; i < cod.length; i++) hash = cod.charCodeAt(i) + ((hash << 5) - hash);
         const gano = (Math.abs(hash) % 100) < 10;
 
-        wrap.style.display = 'block';
-
+        document.getElementById('juego-wrap').style.display = 'block';
         if(gano) {
-            bg.innerHTML = "<span style='color:green'>🏆 ¡GANASTE!</span>";
-            btnEx.innerHTML = `<button class="btn-wsp" onclick="window.open('https://wa.me/51975754119?text=Gané con el código ${cod}')">RECLAMAR GALLETA</button>`;
+            document.getElementById('premio-bg').innerHTML = "🏆 GANASTE";
         } else {
             misPuntos += 10;
             localStorage.setItem('hb_puntos', misPuntos);
             updatePuntosUI();
-            bg.innerHTML = "<span style='color:#666'>+10 PUNTOS</span>";
-            btnEx.innerHTML = `<p style='text-align:center; color:green; font-weight:bold;'>¡Código válido! Se tachó de la lista global.</p>`;
+            document.getElementById('premio-bg').innerHTML = "+10 PUNTOS";
         }
-        
         initCanvas();
-        codInput.value = "";
-
-    } catch (error) {
-        alert("Error de conexión. Revisa tu internet.");
-    }
+    } catch (e) { alert("Error"); }
 }
 
 function initCanvas() {
     const c = document.getElementById("canvas"), ctx = c.getContext("2d");
-    ctx.globalCompositeOperation="source-over"; ctx.fillStyle="#c0c0c0"; ctx.fillRect(0,0,300,150);
-    ctx.fillStyle="#555"; ctx.font="bold 18px Arial"; ctx.textAlign="center"; ctx.fillText("RASPA AQUÍ PARA VER", 150, 85);
+    ctx.fillStyle="#c0c0c0"; ctx.fillRect(0,0,300,150);
     const ras = (e) => {
         const r = c.getBoundingClientRect();
-        const x = (e.clientX || (e.touches ? e.touches[0].clientX : 0)) - r.left, 
-              y = (e.clientY || (e.touches ? e.touches[0].clientY : 0)) - r.top;
-        ctx.globalCompositeOperation="destination-out"; ctx.beginPath(); ctx.arc(x,y,25,0,Math.PI*2); ctx.fill();
+        const x = (e.clientX || e.touches[0].clientX) - r.left;
+        const y = (e.clientY || e.touches[0].clientY) - r.top;
+        ctx.globalCompositeOperation="destination-out"; ctx.beginPath(); ctx.arc(x,y,20,0,Math.PI*2); ctx.fill();
     };
     c.ontouchmove = (e) => { e.preventDefault(); ras(e); };
-    c.onmousemove = (e) => { if(e.buttons==1) ras(e); };
 }
 
-// --- CANJE ---
-function canjearPuntos(costo, item) {
-    if (misPuntos < costo) return alert("Aún no tienes suficientes puntos.");
-    if(confirm(`¿Deseas canjear ${costo} puntos por ${item}?`)) {
-        misPuntos -= costo;
-        localStorage.setItem('hb_puntos', misPuntos);
-        updatePuntosUI();
-        window.open(`https://wa.me/51975754119?text=Hola Héctor, canjeé mis puntos por una ${item}`);
-    }
+function canjearPuntos(c, i) {
+    if (misPuntos < c) return alert("Puntos insuficientes");
+    misPuntos -= c; localStorage.setItem('hb_puntos', misPuntos);
+    updatePuntosUI(); alert("Canje exitoso");
 }
 
-// --- RESEÑAS ---
 let currentRate = 0;
 function setRate(n) {
     currentRate = n;
@@ -405,18 +347,19 @@ function setRate(n) {
 
 function publicar() {
     const nom = document.getElementById("revNombre").value, com = document.getElementById("revComento").value;
-    if(!nom || !com || currentRate === 0) return alert("Llena todos los campos");
-    db.collection("opiniones").add({ nombre: nom, comentario: com, estrellas: currentRate, fecha: Date.now(), author: myUid });
+    if(!nom || !com || currentRate === 0) return alert("Completa campos");
+    db.collection("opiniones").add({ nombre: nom, comentario: com, estrellas: currentRate, fecha: Date.now() });
     document.getElementById("revComento").value = ""; setRate(0);
 }
 
+// CARGA DE OPINIONES EN VIVO
 db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
     let h = "";
     snap.forEach(doc => {
         const op = doc.data();
-        h += `<div class="opinion-card" style="background:#fff; padding:15px; border-radius:15px; margin-bottom:10px; border:1px solid #eee">
-            <b style="color:var(--verde)">${op.nombre}</b> <span style="color:var(--dorado)">${"★".repeat(op.estrellas)}</span>
-            <p style="font-size:13px; margin:5px 0; color:#555;">${op.comentario}</p>
+        h += `<div class="card" style="padding:10px; margin-bottom:5px;">
+            <b>${op.nombre}</b> ${"⭐".repeat(op.estrellas)}<br>
+            <small>${op.comentario}</small>
         </div>`;
     });
     document.getElementById("listaOpiniones").innerHTML = h;
