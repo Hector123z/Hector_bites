@@ -24,37 +24,52 @@ body {
     padding-top: 60px;
     color: #333;
 }
-/* --- CORRECCIÓN DEL MENÚ --- */
+
+/* --- NAVBAR Y MENÚ --- */
+.navbar {
+    background: var(--verde);
+    color: white;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    height: 60px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.menu-btn { font-size: 30px; cursor: pointer; display: flex; align-items: center; padding: 10px; }
+.nav-title { margin-left: 15px; font-weight: 800; font-size: 20px; letter-spacing: 1px; }
+
 .sidebar {
     position: fixed;
-    left: -285px; /* Escondido a la izquierda */
+    left: -285px;
     top: 0;
     width: 270px;
-    height: 100vh; /* Altura total de la pantalla */
+    height: 100vh;
     background: var(--blanco);
-    transition: 0.4s ease;
-    z-index: 3000; /* Aumentamos el nivel para que esté por encima de todo */
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 3000; /* Prioridad máxima */
     box-shadow: 10px 0 20px rgba(0,0,0,0.2);
-    padding-top: 20px;
-    display: block !important; /* Asegura que no esté en none */
+    padding-top: 10px;
 }
+.sidebar.active { left: 0; }
+.sidebar-header { padding: 30px 20px; border-bottom: 2px solid var(--claro); color: var(--verde); font-weight: 800; font-size: 22px; text-align: center; }
+.sidebar a { display: flex; align-items: center; padding: 18px 25px; color: #444; text-decoration: none; font-weight: 600; border-bottom: 1px solid #f5f5f5; transition: 0.2s; }
+.sidebar a:active { background: var(--claro); color: var(--verde); }
 
-.sidebar.active {
-    left: 0; /* Se desliza hacia adentro */
-}
+.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2500; backdrop-filter: blur(3px); }
 
-/* El fondo oscuro que aparece al abrir el menú */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: none; 
-    z-index: 2500; 
-    backdrop-filter: blur(3px);
-}
+/* --- CONTENEDORES --- */
+.container { padding: 15px; max-width: 440px; margin: auto; }
+.section { display: none; }
+.section.active { display: block; animation: slideUp 0.4s ease-out; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.card { background: var(--blanco); border-radius: 28px; padding: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.03); }
+
 /* --- TIENDA Y PRODUCTOS --- */
 .producto-card {
     background: var(--gris-fondo);
@@ -93,6 +108,10 @@ canvas { position: absolute; top: 0; left: 0; z-index: 2; border-radius: 20px; t
 /* --- PUNTOS Y TAGS --- */
 .puntos-tag { background: var(--dorado); color: #000; padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 14px; box-shadow: 0 3px 8px rgba(255, 215, 0, 0.4); }
 .canje-card { background: var(--gris-fondo); padding: 18px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border: 1px solid #eee; }
+
+/* ESTRELLAS */
+.star-on { color: var(--dorado); cursor: pointer; font-size: 25px; }
+.star-off { color: #ccc; cursor: pointer; font-size: 25px; }
 </style>
 </head>
 
@@ -246,8 +265,6 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let myUid = "";
 let misPuntos = parseInt(localStorage.getItem('hb_puntos')) || 0;
-// Cargar códigos ya usados en este celular
-let usados = JSON.parse(localStorage.getItem('hb_cods_usados')) || [];
 
 firebase.auth().signInAnonymously().then(u => { myUid = u.user.uid; });
 
@@ -264,9 +281,14 @@ function toggleMenu() {
 
 function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    const target = document.getElementById(id);
+    if(target) target.classList.add('active');
+    
     updatePuntosUI();
-    if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
+    const side = document.getElementById('sidebar');
+    const over = document.getElementById('overlay');
+    side.classList.remove('active');
+    over.style.display = 'none';
     window.scrollTo(0,0);
 }
 
@@ -293,7 +315,8 @@ function enviarPedido() {
     const msg = `*PEDIDO HÉCTOR BITES*\n👤 Alumno: ${n}\n📍 Aula: ${g} ${s}\n🍪 Galletas: ${unid}\n🎁 Pack Duo: ${pack}\n💰 TOTAL: S/ ${t}`;
     window.open(`https://wa.me/51975754119?text=${encodeURIComponent(msg)}`);
 }
-// --- RASPADO CON VERIFICACIÓN GLOBAL (FIREBASE) ---
+
+// --- RASPADO ---
 async function verificarCod() {
     const codInput = document.getElementById('codInput');
     const cod = codInput.value.trim().toUpperCase();
@@ -301,35 +324,30 @@ async function verificarCod() {
     const wrap = document.getElementById('juego-wrap');
     const btnEx = document.getElementById('btnCanjeExtra');
 
-    // Limpiar vista previa
     wrap.style.display = 'none';
     btnEx.innerHTML = "";
 
-    // 1. VALIDACIÓN LOCAL: ¿Existe en la lista de 100?
     if (!CODS_VALIDOS.includes(cod)) {
         return alert("❌ Este código no existe.");
     }
 
     try {
-        // 2. VALIDACIÓN EN LA NUBE: ¿Ya se usó en cualquier otro celular?
         const docRef = db.collection("Codigos").doc(cod);
         const doc = await docRef.get();
 
         if (doc.exists) {
-            return alert("⚠️ Este código ya fue tachado (ya se usó anteriormente).");
+            return alert("⚠️ Este código ya fue tachado anteriormente.");
         }
 
-        // 3. SI EL CÓDIGO ES NUEVO: Lo "tachamos" en Firebase ahora mismo
         await docRef.set({
             usado: true,
             fechaUso: firebase.firestore.FieldValue.serverTimestamp(),
             usuario: myUid
         });
 
-        // 4. Lógica de premio (probabilidad según el hash del código)
         let hash = 0;
         for (let i = 0; i < cod.length; i++) hash = cod.charCodeAt(i) + ((hash << 5) - hash);
-        const gano = (Math.abs(hash) % 100) < 10; // 10% probabilidad de ganar galleta
+        const gano = (Math.abs(hash) % 100) < 10;
 
         wrap.style.display = 'block';
 
@@ -348,46 +366,8 @@ async function verificarCod() {
         codInput.value = "";
 
     } catch (error) {
-        console.error("Error Firebase:", error);
-        alert("Error de conexión. Asegúrate de tener internet para verificar el código.");
+        alert("Error de conexión. Revisa tu internet.");
     }
-}
-    // Limpiar vista previa
-    wrap.style.display = 'none';
-    btnEx.innerHTML = "";
-
-    // VALIDACIÓN
-    if (!CODS_VALIDOS.includes(cod)) {
-        return alert("❌ Código incorrecto o no existe.");
-    }
-
-    if (usados.includes(cod)) {
-        return alert("⚠️ Este código ya fue usado en este celular.");
-    }
-
-    // Si pasa, marcar como usado
-    usados.push(cod);
-    localStorage.setItem('hb_cods_usados', JSON.stringify(usados));
-
-    // Lógica de premio (probabilidad según el hash del código)
-    let hash = 0;
-    for (let i = 0; i < cod.length; i++) hash = cod.charCodeAt(i) + ((hash << 5) - hash);
-    const gano = (Math.abs(hash) % 100) < 10; // 10% probabilidad de ganar galleta
-
-    wrap.style.display = 'block';
-
-    if(gano) {
-        bg.innerHTML = "<span style='color:green'>🏆 ¡GANASTE!</span>";
-        btnEx.innerHTML = `<button class="btn-wsp" onclick="window.open('https://wa.me/51975754119?text=Gané con el código ${cod}')">RECLAMAR GALLETA</button>`;
-    } else {
-        misPuntos += 10;
-        localStorage.setItem('hb_puntos', misPuntos);
-        updatePuntosUI();
-        bg.innerHTML = "<span style='color:#666'>+10 PUNTOS</span>";
-        btnEx.innerHTML = `<p style='text-align:center; color:green; font-weight:bold;'>¡Código válido! Se sumaron 10 puntos.</p>`;
-    }
-    initCanvas();
-    document.getElementById('codInput').value = "";
 }
 
 function initCanvas() {
@@ -442,13 +422,7 @@ db.collection("opiniones").orderBy("fecha","desc").onSnapshot(snap => {
     document.getElementById("listaOpiniones").innerHTML = h;
 });
 
-// --- FUNCIÓN DEL QR E INICIO ---
-window.onload = function() {
-    if (window.location.hash === "#raspa") {
-        showSection('sec-raspa');
-    }
-    updatePuntosUI();
-};
+window.onload = updatePuntosUI;
 </script>
 </body>
 </html>
