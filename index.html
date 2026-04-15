@@ -308,14 +308,65 @@ function enviarPedido() {
     const msg = `*PEDIDO HÉCTOR BITES*\n👤 Alumno: ${n}\n📍 Aula: ${g} ${s}\n🍪 Galletas: ${unid}\n🎁 Pack Duo: ${pack}\n💰 TOTAL: S/ ${t}`;
     window.open(`https://wa.me/51975754119?text=${encodeURIComponent(msg)}`);
 }
-
-// --- RASPADO ---
-function verificarCod() {
-    const cod = document.getElementById('codInput').value.trim().toUpperCase();
+// --- RASPADO CON VERIFICACIÓN GLOBAL (FIREBASE) ---
+async function verificarCod() {
+    const codInput = document.getElementById('codInput');
+    const cod = codInput.value.trim().toUpperCase();
     const bg = document.getElementById('premio-bg');
     const wrap = document.getElementById('juego-wrap');
     const btnEx = document.getElementById('btnCanjeExtra');
 
+    // Limpiar vista previa
+    wrap.style.display = 'none';
+    btnEx.innerHTML = "";
+
+    // 1. VALIDACIÓN LOCAL: ¿Existe en la lista de 100?
+    if (!CODS_VALIDOS.includes(cod)) {
+        return alert("❌ Este código no existe.");
+    }
+
+    try {
+        // 2. VALIDACIÓN EN LA NUBE: ¿Ya se usó en cualquier otro celular?
+        const docRef = db.collection("Codigos").doc(cod);
+        const doc = await docRef.get();
+
+        if (doc.exists) {
+            return alert("⚠️ Este código ya fue tachado (ya se usó anteriormente).");
+        }
+
+        // 3. SI EL CÓDIGO ES NUEVO: Lo "tachamos" en Firebase ahora mismo
+        await docRef.set({
+            usado: true,
+            fechaUso: firebase.firestore.FieldValue.serverTimestamp(),
+            usuario: myUid
+        });
+
+        // 4. Lógica de premio (probabilidad según el hash del código)
+        let hash = 0;
+        for (let i = 0; i < cod.length; i++) hash = cod.charCodeAt(i) + ((hash << 5) - hash);
+        const gano = (Math.abs(hash) % 100) < 10; // 10% probabilidad de ganar galleta
+
+        wrap.style.display = 'block';
+
+        if(gano) {
+            bg.innerHTML = "<span style='color:green'>🏆 ¡GANASTE!</span>";
+            btnEx.innerHTML = `<button class="btn-wsp" onclick="window.open('https://wa.me/51975754119?text=Gané con el código ${cod}')">RECLAMAR GALLETA</button>`;
+        } else {
+            misPuntos += 10;
+            localStorage.setItem('hb_puntos', misPuntos);
+            updatePuntosUI();
+            bg.innerHTML = "<span style='color:#666'>+10 PUNTOS</span>";
+            btnEx.innerHTML = `<p style='text-align:center; color:green; font-weight:bold;'>¡Código válido! Se tachó de la lista global.</p>`;
+        }
+        
+        initCanvas();
+        codInput.value = "";
+
+    } catch (error) {
+        console.error("Error Firebase:", error);
+        alert("Error de conexión. Asegúrate de tener internet para verificar el código.");
+    }
+}
     // Limpiar vista previa
     wrap.style.display = 'none';
     btnEx.innerHTML = "";
