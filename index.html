@@ -373,7 +373,6 @@ function publicar() {
     db.collection("opiniones").add({ nombre: nom, comentario: com, estrellas: currentRate, fecha: Date.now() });
     document.getElementById("revComento").value = ""; setRate(0);
 }
-
 // CARGA DE OPINIONES EN VIVO
 db.collection("opiniones").orderBy("fecha","desc").limit(10).onSnapshot(snap => {
     let h = "";
@@ -382,27 +381,29 @@ db.collection("opiniones").orderBy("fecha","desc").limit(10).onSnapshot(snap => 
         h += `<div class="card" style="padding:15px; margin-bottom:10px; border:1px solid #eee;">
             <div style="display:flex; justify-content:space-between;">
                 <b>${op.nombre}</b>
-                <span style="color:#FFD700;">${"★".repeat(op.estrellas)}</span>
+                <span style="color:#FFD700;">${"★".repeat(op.estrellas || 0)}</span>
             </div>
             <p style="margin:8px 0 0 0; font-size:14px; color:#555;">${op.comentario}</p>
         </div>`;
     });
     document.getElementById("listaOpiniones").innerHTML = h;
 });
-// --- BLOQUE DE SEGURIDAD PARA NAVEGADOR ---
-window.onload = function() {
-    updatePuntosUI(); // Carga tus puntos al iniciar
 
-    // Verificamos si es Chrome original
-    const esChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+// --- BLOQUE DE SEGURIDAD ÚNICO ---
+window.onload = function() {
+    // 1. Ejecutamos la actualización de puntos
+    updatePuntosUI(); 
+
+    // 2. Verificamos el navegador
+    const agente = navigator.userAgent;
+    const esChrome = /Chrome/.test(agente) && /Google Inc/.test(navigator.vendor);
     const esBrave = (navigator.brave !== undefined);
 
-    // Si detecta Brave o cualquier otro navegador que no sea Chrome, lanza el aviso
+    // 3. Si es Brave o NO es Chrome (como el navegador de WhatsApp/FB), avisamos
     if (esBrave || !esChrome) {
         alert("⚠️ ¡AVISO IMPORTANTE!\n\nPara que tus CÓDIGOS funcionen y no pierdas tus PUNTOS, debes usar el navegador GOOGLE CHROME.\n\nCopia este link y pégalo en Chrome:\nhttps://hector123z.github.io/Hector_bites/");
     }
 };
-window.onload = updatePuntosUI;
 </script>
 </body>
 </html>
